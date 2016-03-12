@@ -1,19 +1,11 @@
 <?php
 
-namespace L91\Sulu\Bundle\EventBundle\Manager;
+namespace L91\Sulu\Bundle\BackendBundle\Manager;
 
 interface ManagerInterface
 {
     /**
-     * @param string $locale
-     * @param array $filters
-     *
-     * @return array
-     */
-    public function getFieldDescriptors($locale, $filters);
-
-    /**
-     * @param int $id
+     * @param string $id
      * @param string $locale
      *
      * @return mixed
@@ -39,22 +31,17 @@ interface ManagerInterface
     /**
      * @param array $data
      * @param string $locale
-     * @param int $id
+     * @param string $id
      *
      * @return mixed
      */
     public function save($data, $locale = null, $id = null);
 
     /**
-     * @param int $id
+     * @param string $id
      * @param string $locale
      *
      * @return mixed
      */
     public function delete($id, $locale = null);
-
-    /**
-     * @return string
-     */
-    public function getModelClass();
 }

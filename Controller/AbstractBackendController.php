@@ -1,8 +1,7 @@
 <?php
 
-namespace L91\Sulu\Bundle\EventBundle\Controller;
+namespace L91\Sulu\Bundle\BackendBundle\Controller;
 
-use L91\Sulu\Bundle\EventBundle\Manager\ManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use Sulu\Component\Rest\ListBuilder\Doctrine\DoctrineListBuilderFactory;
 use Sulu\Component\Rest\ListBuilder\ListRepresentation;
@@ -12,13 +11,11 @@ use Sulu\Component\Security\SecuredControllerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class AbstractRestController extends FOSRestController implements SecuredControllerInterface
+abstract class AbstractBackendController
+    extends FOSRestController
+    implements SecuredControllerInterface,
+    ManagerControllerInterface
 {
-    /**
-     * @return ManagerInterface
-     */
-    abstract protected function getManager();
-
     /**
      * @param Request $request
      *
@@ -38,10 +35,10 @@ abstract class AbstractRestController extends FOSRestController implements Secur
             $factory = $this->get('sulu_core.doctrine_list_builder_factory');
 
             // get model class
-            $listBuilder = $factory->create($this->getManager()->getModelClass());
+            $listBuilder = $factory->create($this->getModelClass());
 
             // get fieldDescriptors
-            $fieldDescriptors = $this->getManager()->getFieldDescriptors($locale, $filters);
+            $fieldDescriptors = $this->getFieldDescriptors($locale, $filters);
             $restHelper->initializeListBuilder($listBuilder, $fieldDescriptors);
 
             // set filters
@@ -152,6 +149,10 @@ abstract class AbstractRestController extends FOSRestController implements Secur
         // delete entity
         $entity = $this->getManager()->delete($id, $locale);
 
+        if (!$entity) {
+            return new Response('', 204);
+        }
+
         return $this->handleView($this->view($this->serialize($entity)));
     }
 
@@ -162,7 +163,7 @@ abstract class AbstractRestController extends FOSRestController implements Secur
      */
     protected function getFieldsAction(Request $request)
     {
-        $fieldDescriptors = $this->getManager()->getFieldDescriptors(
+        $fieldDescriptors = $this->getFieldDescriptors(
             $this->getLocale($request),
             $this->getFilters($request)
         );
@@ -197,13 +198,13 @@ abstract class AbstractRestController extends FOSRestController implements Secur
         unset($filters['locale']);
         unset($filters['flat']);
 
-        $filters['fields'] =  $listRestHelper->getFields();
-        $filters['limit'] =  (int)$listRestHelper->getLimit();
-        $filters['offset'] =  (int)$listRestHelper->getOffset();
-        $filters['sortColumn'] =  $listRestHelper->getSortColumn();
-        $filters['sortOrder'] =  $listRestHelper->getSortOrder();
-        $filters['searchFields'] =  $listRestHelper->getSearchFields();
-        $filters['searchPattern'] =  $listRestHelper->getSearchPattern();
+        $filters['fields'] = $listRestHelper->getFields();
+        $filters['limit'] = (int)$listRestHelper->getLimit();
+        $filters['offset'] = (int)$listRestHelper->getOffset();
+        $filters['sortColumn'] = $listRestHelper->getSortColumn();
+        $filters['sortOrder'] = $listRestHelper->getSortOrder();
+        $filters['searchFields'] = $listRestHelper->getSearchFields();
+        $filters['searchPattern'] = $listRestHelper->getSearchPattern();
 
         return $filters;
     }
