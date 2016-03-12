@@ -1,0 +1,22 @@
+{
+    "name": "l91/sulu-backend-bundle",
+    "description": "Sulu Bundle for easier create your own backend bundles.",
+    "type": "sulu-bundle",
+    "require": {
+        "php": ">=5.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Schranz",
+            "homepage": "http://alexanderschranz.com"
+        }
+    ],
+    "homepage": "https://github.com/alexander-schranz/sulu-backend-bundle",
+    "autoload": {
+        "psr-0": {
+            "L91\\Sulu\\Bundle\\BackendBundle": ""
+        }
+    },
+    "target-dir": "L91/Sulu/Bundle/BackendBundle"
+}

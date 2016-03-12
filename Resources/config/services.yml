@@ -1,0 +1,4 @@
+services:
+#    l91_sulu_backend.example:
+#        class: L91\Sulu\Bundle\BackendBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
