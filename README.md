@@ -188,4 +188,34 @@ your.vehicle:
 
 ## 5. Admin Navigation
 
-TODO
+To get your new bundle in the Navigation you need create a `sulu.admin` service.
+You can use the `BackendAdmin` class for this and register the following service:
+
+```yml
+services:
+    your_bundle.admin:
+        class: L91\Sulu\Bundle\BackendBundle\Admin\BackendAdmin
+        arguments:
+            - '@sulu_security.security_checker'
+            - '%sulu_admin.name%'
+            - 'yourbundle' # title main navigation
+            - 'icon' # icon main navigation
+            - null # jsBundleName
+            - vehicle:
+                permission: your.bundle.vehicles # permission for this menu point
+                title: your_bundle.vehicles # menu title
+                icon: calendar # menu icon
+                action: yourbundle/vehicles # menu routing action
+              boat: # just another menu point in your navigation
+                permission: your.bundle.boats # permission for this menu point
+                title: your_bundle.boats # menu title
+                icon: calendar # menu icon
+                action: yourbundle/boats # menu routing action
+            - Sulu: # securityContexts
+                Yourbundle: 
+                    - your.bundle.vehicles
+                    - your.bundle.boats
+        tags:
+            - { name: sulu.admin }
+            - { name: sulu.context, context: admin }
+```
