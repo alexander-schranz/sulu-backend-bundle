@@ -30,7 +30,7 @@ The `BackendRepository` have a default implementation for:
 
 If you want to overwrite them all you can just implement the `BackendRepositoryInterface`. 
 
-```
+```php
 <?php
 
 namespace YourBundle\Entity\Repository;
@@ -45,7 +45,7 @@ class VehicleRepository extends BackendRepository
 
 **Register Repository**
 
-```
+```yml
 services:
     your.repository.vehicle:
         class: YourBundle\Entity\VehicleRepository
