@@ -1,0 +1,24 @@
+// defines the api endpoint for items
+
+define([
+    'mvc/collection',
+    '{{ js_bundle_name }}/model/{{ entity|lower }}'
+], function (Collection, Model) {
+
+    return Collection({
+
+        model: Model,
+
+        url: function () {
+            return '/admin/api/{{ entity|lower }}';
+        },
+
+        fieldsUrl: function () {
+            return '/admin/api/{{ entity|lower }}/fields';
+        },
+
+        parse: function (resp) {
+            return resp._embedded.{{ entity_pluralize|lower }};
+        }
+    });
+});

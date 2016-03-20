@@ -1,0 +1,32 @@
+        // no locale redirect
+        sandbox.mvc.routes.push({
+            route: '{{ entity_pluralize|lower }}',
+            callback: function () {
+                var language = getContentLanguage();
+                sandbox.emit('sulu.router.navigate', '{{ entity_pluralize|lower }}/' + language);
+            }
+        });
+
+        // list all collections
+        sandbox.mvc.routes.push({
+            route: '{{ entity_pluralize|lower }}/:language',
+            callback: function (language) {
+                return '<div data-aura-component="{{ entity_pluralize|lower }}@{{ js_bundle_name }}" data-aura-language="' + language + '" data-aura-display="list"/>';
+            }
+        });
+
+        // add collection
+        sandbox.mvc.routes.push({
+            route: '{{ entity_pluralize|lower }}/:language/add/:content',
+            callback: function (language, content) {
+                return '<div data-aura-component="{{ entity_pluralize|lower }}/tabs@{{ js_bundle_name }}" data-aura-language="' + language + '" data-aura-content="' + content + '"/>';
+            }
+        });
+
+        // edit collection
+        sandbox.mvc.routes.push({
+            route: '{{ entity_pluralize|lower }}/:language/edit::id/:content',
+            callback: function (language, id, content) {
+                return '<div data-aura-component="{{ entity_pluralize|lower }}/tabs@{{ js_bundle_name }}" data-aura-language="' + language + '" data-aura-id="' + id + '" data-aura-content="' + content + '"/>';
+            }
+        });
