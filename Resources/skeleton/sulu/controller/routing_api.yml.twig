@@ -1,0 +1,3 @@
+{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}:
+    type: rest
+    resource: {{ namespace }}\Controller{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}Controller
