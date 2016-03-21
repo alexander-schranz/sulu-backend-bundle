@@ -1,0 +1,6 @@
+services:
+    {{ bundle_prefix }}.manager.{{ entity|lower }}:
+        class: {{ namespace }}\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}Manager
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+            - '@{{ bundle_prefix }}.repository.{{ entity|lower }}'

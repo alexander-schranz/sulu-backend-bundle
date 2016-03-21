@@ -1,0 +1,169 @@
+<?php
+
+{% block namespace %}
+namespace {{ namespace }}\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+{% endblock %}
+
+{% block use %}
+use {{ namespace }}\Entity\{{ entity }};
+{% if extended %}
+use {{ metadata.customRepositoryClassName }};
+use Doctrine\ORM\EntityManagerInterface;
+{% else %}
+use L91\Sulu\Bundle\BackendBundle\Manager\AbstractBackendManager;
+{% endif %}
+{% endblock %}
+
+{% block class_annotations %}
+/**
+ * {% include 'sulu/comment.twig' %}
+
+ */
+{% endblock %}
+{% block class_definition %}
+class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% endif %}
+{% endblock class_definition %}
+
+{
+{% if extended %}
+{% block var_entity_manager %}
+    /**
+     * @var EntityManagerInterface
+     */
+    protected $entityManager;
+{% endblock %}
+
+{% block var_repository %}
+    /**
+     * @var {{ entity }}Repository
+     */
+    protected $repository;
+{% endblock %}
+
+{% block constructor %}
+    /**
+     * EventManager constructor.
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param {{ entity }}Repository ${{ entity|lower }}Repository
+     */
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        {{ entity }}Repository ${{ entity|lower }}Repository
+    ) {
+        $this->entityManager = $entityManager;
+        $this->{{ entity|lower }}Repository = ${{ entity|lower }}Repository;
+    }
+{% endblock %}
+
+{% block find_by_id %}
+    /**
+     * {@inheritdoc}
+     */
+    public function findById($id, $locale = null)
+    {
+        return $this->repository->findById($id, $locale);
+    }
+{% endblock %}
+
+{% block find_all %}
+    /**
+     * {@inheritdoc}
+     */
+    public function findAll($locale = null, $filters)
+    {
+        return $this->repository->findAll($locale, $filters);
+    }
+{% endblock %}
+
+{% block count %}
+    /**
+     * {@inheritdoc}
+     */
+    public function count($locale = null, $filters)
+    {
+        return $this->repository->count($locale, $filters);
+    }
+{% endblock %}
+
+{% endif %}
+{% block save %}
+    /**
+     * {@inheritdoc}
+     */
+    public function save($data, $locale = null, $id = null)
+    {
+        if (!$id) {
+            ${{ entity|lower }} = new {{ entity }}();
+        } else {
+            ${{ entity|lower }} = $this->findById($id, $locale);
+        }
+
+{% for column in metadata.columnNames if metadata.singleIdentifierFieldName != column %}
+{% spaceless %}
+        {% set default = '' %}
+        {% if not metadata.fieldMappings[column]['nullable']|default(false) %}
+            {% if metadata.typeOfField(column) in ['date', 'datetime'] %}
+                {% set default = ', new \\DateTime()' %}
+            {% elseif  metadata.typeOfField(column) in ['integer', 'float', 'double', 'decimal'] %}
+                {% set default = ', 0' %}
+            {% else %}
+                {% set default = ', \'\'' %}
+            {% endif %}
+        {% endif %}
+{% endspaceless %}
+        ${{ entity|lower }}->set{{ column[:1]|upper ~ column[1:] }}(self::getValue($data, '{{ column }}'{{ default }}));
+{% endfor %}
+
+        $this->entityManager->persist(${{ entity|lower }});
+        $this->entityManager->flush();
+
+        if (!$id) {
+            // to avoid lazy load of sub entities in the serializer reload whole object with sub entities from db
+            // remove this when you don`t join anything in `findById`
+            ${{ entity|lower }} = $this->findById(${{ entity|lower }}->get{{ metadata.singleIdentifierFieldName|capitalize }}(), $locale);
+        }
+
+        return ${{ entity|lower }};
+    }
+{% endblock %}
+{% if extended %}
+
+{% block delete %}
+    /**
+     * {@inheritdoc}
+     */
+    public function delete($id, $locale = null)
+    {
+        $object = $this->findById($id, $locale);
+
+        if (!$object) {
+            return null;
+        }
+
+        $this->entityManager->remove($object);
+        $this->entityManager->flush();
+
+        return $object;
+    }
+{% endblock %}
+
+{% block get_value %}
+    /**
+     * @param $data
+     * @param $value
+     * @param null $default
+     *
+     * @return mixed
+     */
+    protected static function getValue($data, $value, $default = null)
+    {
+        if (isset($data[$value])) {
+            return $data[$value];
+        }
+
+        return $default;
+    }
+{% endblock %}
+{% endif %}
+}

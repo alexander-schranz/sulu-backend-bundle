@@ -1,6 +1,6 @@
 <?php
 
-namespace L91\Sulu\Bundle\BackendBundle\Entity\Repository;
+namespace L91\Sulu\Bundle\BackendBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping;

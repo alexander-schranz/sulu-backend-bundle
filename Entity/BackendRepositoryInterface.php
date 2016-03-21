@@ -1,10 +1,8 @@
 <?php
 
-namespace L91\Sulu\Bundle\BackendBundle\Entity\Repository;
+namespace L91\Sulu\Bundle\BackendBundle\Entity;
 
-use Doctrine\Common\Persistence\ObjectRepository;
-
-interface BackendRepositoryInterface extends ObjectRepository
+interface BackendRepositoryInterface
 {
     /**
      * @param string $id

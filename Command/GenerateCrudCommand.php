@@ -46,12 +46,28 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
 
         $entityClass = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle) . '\\' . $entity;
         $metadata = $this->getEntityMetadata($entityClass);
+
         $bundle = $this->getContainer()->get('kernel')->getBundle($bundle);
 
         /** @var SuluCrudGenerator $generator */
         $generator = $this->getGenerator($bundle);
 
         $questionHelper = $this->getQuestionHelper();
+
+        // generate manager
+        $question = new ConfirmationQuestion(
+            $questionHelper->getQuestion('Do you want to generate a Manager', 'yes', '?'),
+            true
+        );
+
+        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
+            $managerRegistration = $generator->generateManager($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
+            $output->writeln(PHP_EOL . 'Manager generated, register the manager with: ' . PHP_EOL);
+            $output->writeln(sprintf(
+                '<info>%s</info>',
+                $managerRegistration
+            ));
+        }
 
         // generate controller
         $question = new ConfirmationQuestion(
@@ -66,17 +82,6 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
                 '<info>%s</info>',
                 $controllerRegistration
             ));
-        }
-
-        // generate manager
-        $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to generate a Manager', 'yes', '?'),
-            true
-        );
-
-        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $output->writeln('Generate "Manager" not implemented yet'); // TODO generate manager
-
         }
 
         // generate admin navigation
