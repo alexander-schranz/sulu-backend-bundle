@@ -10,7 +10,7 @@ interface ManagerInterface
      *
      * @return mixed
      */
-    public function get($id, $locale = null);
+    public function findById($id, $locale = null);
 
     /**
      * @param string $locale
@@ -18,7 +18,7 @@ interface ManagerInterface
      *
      * @return array
      */
-    public function getBy($locale = null, $filters);
+    public function findAll($locale = null, $filters);
 
     /**
      * @param null $locale
@@ -26,7 +26,7 @@ interface ManagerInterface
      *
      * @return integer
      */
-    public function countBy($locale = null, $filters);
+    public function count($locale = null, $filters);
 
     /**
      * @param array $data

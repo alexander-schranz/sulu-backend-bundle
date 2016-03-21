@@ -55,7 +55,7 @@ abstract class AbstractBackendController
             $limit = $listBuilder->getLimit();
         } else {
             // load all entities by filters
-            $list = $this->getManager()->getBy($locale, $filters);
+            $list = $this->getManager()->findAll($locale, $filters);
 
             // get pagination
             $offset = $this->getOffset($filters);
@@ -65,7 +65,7 @@ abstract class AbstractBackendController
 
             // if to avoid db request with less items then the limit
             if (count($list) >= $limit) {
-                $total = $this->getManager()->countBy($locale, $this->getCountFilters($filters));
+                $total = $this->getManager()->count($locale, $this->getCountFilters($filters));
             }
         }
 
@@ -94,7 +94,7 @@ abstract class AbstractBackendController
         $locale = $this->getLocale($request);
 
         // get entity
-        $entity = $this->getManager()->get($id, $locale);
+        $entity = $this->getManager()->findById($id, $locale);
 
         return $this->handleView($this->view($entity));
     }

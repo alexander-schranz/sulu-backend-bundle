@@ -18,17 +18,17 @@ class BackendRepository extends EntityRepository implements BackendRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function get($id, $locale = null)
+    public function findById($id, $locale = null)
     {
         return $this->find($id);
     }
 
     /**
-     * When overwrite this method its recommended to create an own countBy method.
+     * When overwrite this method its recommended to create an own count method.
      *
      * {@inheritdoc}
      */
-    public function getBy($locale = null, $filters = [])
+    public function findAll($locale = null, $filters = [])
     {
         return $this->findBy(
             [],
@@ -41,9 +41,9 @@ class BackendRepository extends EntityRepository implements BackendRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function countBy($locale = null, $filters = [])
+    public function count($locale = null, $filters = [])
     {
-        return count($this->getBy($locale, $filters));
+        return count($this->findAll($locale, $filters));
     }
 
     /**

@@ -2,7 +2,9 @@
 
 namespace L91\Sulu\Bundle\BackendBundle\Entity\Repository;
 
-interface BackendRepositoryInterface
+use Doctrine\Common\Persistence\ObjectRepository;
+
+interface BackendRepositoryInterface extends ObjectRepository
 {
     /**
      * @param string $id
@@ -10,7 +12,7 @@ interface BackendRepositoryInterface
      *
      * @return mixed
      */
-    public function get($id, $locale = null);
+    public function findById($id, $locale = null);
 
     /**
      * @param string $locale
@@ -18,7 +20,7 @@ interface BackendRepositoryInterface
      *
      * @return array
      */
-    public function getBy($locale = null, $filters = []);
+    public function findAll($locale = null, $filters = []);
 
     /**
      * @param string $locale
@@ -26,5 +28,5 @@ interface BackendRepositoryInterface
      *
      * @return int
      */
-    public function countBy($locale = null, $filters = []);
+    public function count($locale = null, $filters = []);
 }
