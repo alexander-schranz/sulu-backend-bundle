@@ -1,4 +1,4 @@
-        // no locale redirect
+        // no locale redirect: {% include 'sulu/comment.twig' %}
         sandbox.mvc.routes.push({
             route: '{{ entity_pluralize|lower }}',
             callback: function () {
@@ -7,7 +7,7 @@
             }
         });
 
-        // list all collections
+        // list all collections: {% include 'sulu/comment.twig' %}
         sandbox.mvc.routes.push({
             route: '{{ entity_pluralize|lower }}/:language',
             callback: function (language) {
@@ -15,7 +15,7 @@
             }
         });
 
-        // add collection
+        // add collection: {% include 'sulu/comment.twig' %}
         sandbox.mvc.routes.push({
             route: '{{ entity_pluralize|lower }}/:language/add/:content',
             callback: function (language, content) {
@@ -23,7 +23,7 @@
             }
         });
 
-        // edit collection
+        // edit collection: {% include 'sulu/comment.twig' %}
         sandbox.mvc.routes.push({
             route: '{{ entity_pluralize|lower }}/:language/edit::id/:content',
             callback: function (language, id, content) {

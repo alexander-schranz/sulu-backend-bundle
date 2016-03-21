@@ -1,5 +1,7 @@
 # SULU Backend Bundle
 
+Inspired by doctrine crud generator.
+
 A Sulu Bundle to make it easier to create a new Backend Bundle.
 
 With this Bundle it should be possible to create a Backend Bundles without
@@ -59,6 +61,6 @@ services:
 
 You can easily generate them with following command:
 
-```
+```bash
 app/console l91:sulu:backend:generate:crud YourBundle:Vehicle
 ```

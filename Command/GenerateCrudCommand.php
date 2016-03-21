@@ -38,7 +38,7 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
         // Generate Extended Classes
         $extended = $input->getOption('extended');
 
-        // get entit ydata
+        // get entity data
         $entity = $input->getArgument('entity');
 
         $entity = Validators::validateEntityName($entity);
@@ -120,6 +120,9 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
         return new SuluCrudGenerator($this->getContainer()->get('filesystem'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getSkeletonDirs(BundleInterface $bundle = null)
     {
         $dirs = parent::getSkeletonDirs($bundle);

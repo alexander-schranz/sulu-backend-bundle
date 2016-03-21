@@ -64,17 +64,12 @@ class SuluCrudGenerator extends Generator
             'entity'            => $entity,
             'metadata'          => $metadata,
             'entity_class'      => $entityClass,
+            'extended'          => $extended,
             'namespace'         => $bundle->getNamespace(),
             'entity_namespace'  => $entityNamespace,
         );
 
-        $template = 'sulu/controller/controller.php.twig';
-
-        if ($extended) {
-            $template = 'sulu/controller/controller_extended.php.twig';
-        }
-
-        $this->renderFile($template, $target, $parameters);
+        $this->renderFile('sulu/controller/controller.php.twig', $target, $parameters);
 
         return $this->render('sulu/controller/routing_api.yml.twig', $parameters);
     }

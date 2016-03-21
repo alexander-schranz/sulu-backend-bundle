@@ -55,23 +55,17 @@ abstract class AbstractBackendController
             $limit = $listBuilder->getLimit();
         } else {
             // load all entities by filters
-            $entities = $this->getManager()->getBy($locale, $filters);
+            $list = $this->getManager()->getBy($locale, $filters);
 
             // get pagination
             $offset = $this->getOffset($filters);
             $limit = $this->getLimit($filters);
-            $total = $offset + count($entities);
+            $total = $offset + count($list);
             $page = $this->getPage($filters);
 
             // if to avoid db request with less items then the limit
-            if (count($entities) >= $limit) {
+            if (count($list) >= $limit) {
                 $total = $this->getManager()->countBy($locale, $this->getCountFilters($filters));
-            }
-
-            // serialize
-            $list = [];
-            foreach ($entities as $entity) {
-                $list[] = $this->serialize($entity);
             }
         }
 
@@ -102,7 +96,7 @@ abstract class AbstractBackendController
         // get entity
         $entity = $this->getManager()->get($id, $locale);
 
-        return $this->handleView($this->view($this->serialize($entity)));
+        return $this->handleView($this->view($entity));
     }
 
     /**
@@ -117,7 +111,7 @@ abstract class AbstractBackendController
         // create entity
         $entity = $this->getManager()->save($this->getData($request), $locale);
 
-        return $this->handleView($this->view($this->serialize($entity)));
+        return $this->handleView($this->view($entity));
     }
 
     /**
@@ -133,7 +127,7 @@ abstract class AbstractBackendController
         // save entity
         $entity = $this->getManager()->save($this->getData($request), $locale, $id);
 
-        return $this->handleView($this->view($this->serialize($entity)));
+        return $this->handleView($this->view($entity));
     }
 
     /**
@@ -153,7 +147,7 @@ abstract class AbstractBackendController
             return new Response('', 204);
         }
 
-        return $this->handleView($this->view($this->serialize($entity)));
+        return $this->handleView($this->view($entity));
     }
 
     /**
@@ -276,15 +270,5 @@ abstract class AbstractBackendController
         }
 
         return $filters['page'];
-    }
-
-    /**
-     * @param $entity
-     *
-     * @return array
-     */
-    protected function serialize($entity)
-    {
-        return $entity;
     }
 }
