@@ -7,6 +7,7 @@ namespace {{ namespace }}\Controller{{ entity_namespace ? '\\' ~ entity_namespac
 {% block use_statements %}
 use {{ namespace }}\Entity\{{ entity }};
 {% if extended %}
+use {{ namespace }}\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity }}Manager;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -39,8 +40,7 @@ use Sulu\Component\Rest\ListBuilder\Doctrine\FieldDescriptor\DoctrineCaseFieldDe
 class {{ entity_class }}Controller
     extends FOSRestController
     implements ClassResourceInterface,
-    SecuredControllerInterface,
-    ManagerControllerInterface
+    SecuredControllerInterface
 {% else %}
 class {{ entity_class }}Controller extends AbstractBackendController implements ClassResourceInterface
 {% endif %}
@@ -58,7 +58,11 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block manager %}
     /**
+{% if extended %}
+     * @return {{ entity }}Manager
+{% else %}
      * {@inheritdoc}
+{% endif %}
      */
     public function getManager()
     {
