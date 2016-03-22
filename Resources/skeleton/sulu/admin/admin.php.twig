@@ -11,6 +11,12 @@ use Sulu\Bundle\AdminBundle\Navigation\NavigationItem;
 use Sulu\Component\Security\Authorization\SecurityCheckerInterface;
 {% endblock %}
 
+{% block class_annotations %}
+/**
+ * {% include 'sulu/comment.twig' %}
+
+ */
+{% endblock %}
 {% block class_definition %}
 class {{ entity_class }}Admin extends Admin
 {% endblock %}

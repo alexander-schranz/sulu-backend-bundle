@@ -1,0 +1,41 @@
+<?php
+
+{% block namespace %}
+namespace {{ namespace }}\Admin;
+{% endblock %}
+
+{% block use_statements %}
+use Sulu\Bundle\AdminBundle\Navigation\ContentNavigationItem;
+use Sulu\Bundle\AdminBundle\Navigation\ContentNavigationProviderInterface;
+{% endblock %}
+
+{% block class_annotations %}
+/**
+ * {% include 'sulu/comment.twig' %}
+
+ */
+{% endblock %}
+{% block class_definition %}
+class {{ entity_class }}NavigationProvider implements ContentNavigationProviderInterface
+{% endblock %}
+{
+{% block get_navigation_items %}
+    /**
+     * {@inheritdoc}
+     */
+    public function getNavigationItems(array $options = array())
+    {
+        $navigationItems = [];
+
+        $navigationItems['detail'] = new ContentNavigationItem('{{ bundle_prefix|replace('_', '.') }}.navigation.details');
+        $navigationItems['detail']->setAction('general');
+        $navigationItems['detail']->setComponent('{{ entity_pluralize|lower }}@{{ js_bundle_name }}');
+        $navigationItems['detail']->setComponentOptions([
+            'display' => 'form',
+            'content' => 'general',
+        ]);
+
+        return $navigationItems;
+    }
+{% endblock %}
+}

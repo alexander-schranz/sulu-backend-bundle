@@ -1,0 +1,21 @@
+services:
+    {{ bundle_prefix }}.navigation_provider.{{ entity|lower }}:
+{% set class = 'L91\\Sulu\\Bundle\\BackendBundle\\Admin\\BackendNavigationProvider' %}
+{% if extended %}
+    {%- set class = namespace ~ '\\Admin\\' ~ entity_class ~ 'NavigationProvider' %}
+{% endif %}
+        class: {{ class }}
+{% if not extended %}
+        arguments:
+            - {{ entity|lower }}:
+                title: {{ bundle_prefix|replace('_', '.') }}.navigation.details # tab title
+                action: general # tab action
+                component: {{ entity_pluralize|lower }}@{{ js_bundle_name }} # tab component
+                componentOptions: # tab component options
+                    display: form
+                    content: general
+
+{% endif %}
+        tags:
+            - { name: sulu_admin.content_navigation, alias: {{ bundle_prefix }}_{{ entity|lower }}  }
+            - { name: sulu.context, context: admin }

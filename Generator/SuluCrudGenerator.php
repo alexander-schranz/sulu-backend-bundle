@@ -85,8 +85,6 @@ class SuluCrudGenerator extends Generator
         return $this->render('sulu/manager/services.yml.twig', $parameters);
     }
 
-
-
     /**
      * @param BundleInterface $bundle
      * @param $entity
@@ -111,13 +109,46 @@ class SuluCrudGenerator extends Generator
             $target = self::getTarget('%s/Admin/%s/%sAdmin.php', $bundle, $entity);
 
             if (!$forceOverwrite && file_exists($target)) {
-                throw new \RuntimeException('Unable to generate the manager as it already exists.');
+                throw new \RuntimeException('Unable to generate the admin as it already exists.');
             }
 
             $this->renderFile('sulu/admin/admin.php.twig', $target, $parameters);
         }
 
         return $this->render('sulu/admin/services.yml.twig', $parameters);
+    }
+
+    /**
+     * @param BundleInterface $bundle
+     * @param $entity
+     * @param ClassMetadataInfo $metadata
+     * @param bool $extended
+     * @param bool $forceOverwrite
+     *
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    public function generateNavigationProvider(
+        BundleInterface $bundle,
+        $entity,
+        ClassMetadataInfo $metadata,
+        $extended = false,
+        $forceOverwrite = false
+    ) {
+        $parameters = self::getParameters($bundle, $entity, $metadata, $extended);
+
+        if ($extended) {
+            $target = self::getTarget('%s/Admin/%s/%sNavigationProvider.php', $bundle, $entity);
+
+            if (!$forceOverwrite && file_exists($target)) {
+                throw new \RuntimeException('Unable to generate the navigation provider as it already exists.');
+            }
+
+            $this->renderFile('sulu/navigation-provider/navigation-provider.php.twig', $target, $parameters);
+        }
+
+        return $this->render('sulu/navigation-provider/services.yml.twig', $parameters);
     }
 
     /**

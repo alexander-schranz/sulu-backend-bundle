@@ -54,15 +54,30 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
 
         $questionHelper = $this->getQuestionHelper();
 
+        // generate content navigation provider
+        $question = new ConfirmationQuestion(
+            $questionHelper->getQuestion('Do you want to generate a navigation provider', 'yes', '?'),
+            true
+        );
+
+        if ($input->isInteractive() && $questionHelper->ask($input, $output, $question)) {
+            $adminRegistration = $generator->generateNavigationProvider($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
+            $output->writeln(PHP_EOL . 'Navigation provider generated, register the Admin with: ' . PHP_EOL);
+            $output->writeln(sprintf(
+                '<info>%s</info>',
+                $adminRegistration
+            ));
+        }
+
         // generate admin navigation
         $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to add a new Admin', 'yes', '?'),
+            $questionHelper->getQuestion('Do you want to add a new "Admin"', 'yes', '?'),
             true
         );
 
         if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
             $adminRegistration = $generator->generateAdmin($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'Admin generated, register the Admin with: ' . PHP_EOL);
+            $output->writeln(PHP_EOL . 'Admin generated, register the admin with: ' . PHP_EOL);
             $output->writeln(sprintf(
                 '<info>%s</info>',
                 $adminRegistration
@@ -71,7 +86,7 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
 
         // generate manager
         $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to generate a Manager', 'yes', '?'),
+            $questionHelper->getQuestion('Do you want to generate a "Manager"', 'yes', '?'),
             true
         );
 
@@ -86,27 +101,17 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
 
         // generate controller
         $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to generate a Controller', 'yes', '?'),
+            $questionHelper->getQuestion('Do you want to generate a "Controller"', 'yes', '?'),
             true
         );
 
         if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
             $controllerRegistration = $generator->generateController($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'Controller generated, register the router with: ' . PHP_EOL);
+            $output->writeln(PHP_EOL . 'Controller generated, register the route with: ' . PHP_EOL);
             $output->writeln(sprintf(
                 '<info>%s</info>',
                 $controllerRegistration
             ));
-        }
-
-        // generate tab
-        $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to add it as a new Tab to an exist entity', 'no', '?'),
-            false
-        );
-
-        if ($input->isInteractive() && $questionHelper->ask($input, $output, $question)) {
-            $output->writeln('Generate "Tab" not implemented yet');  // TODO generate tab
         }
 
         // generate js

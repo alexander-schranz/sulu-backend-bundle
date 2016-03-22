@@ -1,6 +1,5 @@
 <?php
 
-
 namespace L91\Sulu\Bundle\BackendBundle\Admin;
 
 use Sulu\Bundle\AdminBundle\Admin\Admin;
