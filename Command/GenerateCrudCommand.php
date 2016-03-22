@@ -54,6 +54,21 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
 
         $questionHelper = $this->getQuestionHelper();
 
+        // generate admin navigation
+        $question = new ConfirmationQuestion(
+            $questionHelper->getQuestion('Do you want to add a new Admin', 'yes', '?'),
+            true
+        );
+
+        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
+            $adminRegistration = $generator->generateAdmin($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
+            $output->writeln(PHP_EOL . 'Admin generated, register the Admin with: ' . PHP_EOL);
+            $output->writeln(sprintf(
+                '<info>%s</info>',
+                $adminRegistration
+            ));
+        }
+
         // generate manager
         $question = new ConfirmationQuestion(
             $questionHelper->getQuestion('Do you want to generate a Manager', 'yes', '?'),
@@ -82,16 +97,6 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
                 '<info>%s</info>',
                 $controllerRegistration
             ));
-        }
-
-        // generate admin navigation
-        $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to add a new Admin Navigation', 'yes', '?'),
-            true
-        );
-
-        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $output->writeln('Generate "Admin Navigation" not implemented yet');  // TODO generate admin navigation
         }
 
         // generate tab

@@ -53,7 +53,6 @@ class BackendAdmin extends Admin
         foreach ($children as $child) {
             if ($this->securityChecker->hasPermission($child['permission'], 'view')) {
                 $childItem = new NavigationItem($child['title']);
-                $childItem->setIcon($child['icon']);
                 $childItem->setAction($child['action']);
                 $navigationItem->addChild($childItem);
             }

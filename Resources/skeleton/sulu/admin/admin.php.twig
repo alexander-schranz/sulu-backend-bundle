@@ -1,0 +1,86 @@
+<?php
+
+{% block namespace %}
+namespace {{ namespace }}\Admin;
+{% endblock %}
+
+{% block use_statements %}
+use Sulu\Bundle\AdminBundle\Admin\Admin;
+use Sulu\Bundle\AdminBundle\Navigation\Navigation;
+use Sulu\Bundle\AdminBundle\Navigation\NavigationItem;
+use Sulu\Component\Security\Authorization\SecurityCheckerInterface;
+{% endblock %}
+
+{% block class_definition %}
+class {{ entity_class }}Admin extends Admin
+{% endblock %}
+{
+{% block constructor %}
+    public function __construct(
+        SecurityCheckerInterface $securityChecker,
+        $title
+    ) {
+        // set root navigation
+        $rootNavigationItem = new NavigationItem($title);
+
+        // parent navigation
+        $section = new NavigationItem('');
+
+        // create section
+        $navigationItem = new NavigationItem('{{ bundle_prefix }}.{{ entity|lower }}');
+        $navigationItem->setIcon('globe');
+        $section->addChild($navigationItem);
+
+        // add {{ entity }} navigation
+        if ($securityChecker->hasPermission('{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}', 'view')) {
+            $childItem = new NavigationItem('{{ bundle_prefix }}.{{ entity_pluralize|lower }}');
+            $childItem->setAction('{{ entity_pluralize|lower }}');
+            $navigationItem->addChild($childItem);
+        }
+
+        // add section only when exist
+        if ($navigationItem->hasChildren()) {
+            $rootNavigationItem->addChild($section);
+        }
+
+        // set navigation
+        $this->setNavigation(new Navigation($rootNavigationItem));
+    }
+{% endblock %}
+
+{% block get_commands %}
+    /**
+     * {@inheritdoc}
+     */
+    public function getCommands()
+    {
+        return [];
+    }
+{% endblock %}
+
+{% block get_js_bundle_name %}
+    /**
+     * {@inheritdoc}
+     */
+    public function getJsBundleName()
+    {
+        return '{{ js_bundle_name }}';
+    }
+{% endblock %}
+
+{% block get_security_contexts %}
+    /**
+     * {@inheritDoc}
+     */
+    public function getSecurityContexts()
+    {
+        return [
+            'Sulu' => [
+                '{{ entity }}' => [
+                    '{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}',
+                ]
+            ]
+        ];
+    }
+{% endblock %}
+}
