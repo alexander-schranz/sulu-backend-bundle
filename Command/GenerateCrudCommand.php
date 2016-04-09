@@ -54,6 +54,17 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
 
         $questionHelper = $this->getQuestionHelper();
 
+        // generate js
+        $question = new ConfirmationQuestion(
+            $questionHelper->getQuestion('Do you want to generate the JS', 'yes', '?'),
+            true
+        );
+
+        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
+            $generator->generateJS($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
+            $output->writeln(PHP_EOL . 'JS successfully generated: ' . PHP_EOL);
+        }
+
         // generate content navigation provider
         $question = new ConfirmationQuestion(
             $questionHelper->getQuestion('Do you want to generate a navigation provider', 'yes', '?'),
@@ -112,16 +123,6 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
                 '<info>%s</info>',
                 $controllerRegistration
             ));
-        }
-
-        // generate js
-        $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to generate the JS', 'yes', '?'),
-            true
-        );
-
-        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $output->writeln('Generate "JS Bundle" not implemented yet');  // TODO generate js bundle
         }
 
         $output->writeln(PHP_EOL . '<info>Generator finished</info>');
