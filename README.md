@@ -26,9 +26,9 @@ First create the doctrine entity with a `.orm.xml`.
 Create a Repository for loading entities from the database.
 The `BackendRepository` have a default implementation for:
 
- - `get`
- - `getBy`
- - `countBy`
+ - `findById`
+ - `findAll`
+ - `count`
 
 If you want to overwrite them all you can just implement the `BackendRepositoryInterface`. 
 
