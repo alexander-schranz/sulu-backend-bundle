@@ -254,13 +254,13 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
     }
 
 {% endblock %}
-{% block getFieldsAction %}
+{% block cgetFieldsAction %}
     /**
      * @param Request $request
      *
      * @return Response
      */
-    protected function getFieldsAction(Request $request)
+    public function cgetFieldsAction(Request $request)
     {
         $fieldDescriptors = $this->getFieldDescriptors(
             $this->getLocale($request),

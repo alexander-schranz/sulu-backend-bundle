@@ -8,12 +8,13 @@ define(['mvc/relationalmodel'], function (relationalModel) {
     'use strict';
 
     return relationalModel({
-        urlRoot: '/admin/api/{{ entity|lower }}',
+        urlRoot: '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|lower }}/{id}',
 
-        defaults: function () {
+        defaults: function() {
             return {
 {% for column in metadata.columnNames %}
                 {{ column }}: null{% if not loop.last %},{% endif %}
+
 {% endfor %}
             };
         }

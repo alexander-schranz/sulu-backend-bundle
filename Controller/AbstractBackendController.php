@@ -155,7 +155,7 @@ abstract class AbstractBackendController
      *
      * @return Response
      */
-    protected function getFieldsAction(Request $request)
+    public function cgetFieldsAction(Request $request)
     {
         $fieldDescriptors = $this->getFieldDescriptors(
             $this->getLocale($request),

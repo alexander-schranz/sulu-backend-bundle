@@ -13,11 +13,11 @@ define([
         model: Model,
 
         url: function () {
-            return '/admin/api/{{ entity|lower }}';
+            return '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|lower }}';
         },
 
         fieldsUrl: function () {
-            return '/admin/api/{{ entity|lower }}/fields';
+            return '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|lower }}/fields';
         },
 
         parse: function (resp) {
