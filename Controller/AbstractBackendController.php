@@ -21,6 +21,21 @@ abstract class AbstractBackendController
      *
      * @return Response
      */
+    public function cgetFieldsAction(Request $request)
+    {
+        $fieldDescriptors = $this->getFieldDescriptors(
+            $this->getLocale($request),
+            $this->getFilters($request)
+        );
+
+        return $this->handleView($this->view(array_values($fieldDescriptors)));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function cgetAction(Request $request)
     {
         $locale = $this->getLocale($request);
@@ -40,11 +55,6 @@ abstract class AbstractBackendController
             // get fieldDescriptors
             $fieldDescriptors = $this->getFieldDescriptors($locale, $filters);
             $restHelper->initializeListBuilder($listBuilder, $fieldDescriptors);
-
-            // set filters
-            foreach ($filters as $key => $value) {
-                $listBuilder->where($fieldDescriptors[$key], $value);
-            }
 
             // load entities
             $list = $listBuilder->execute();
@@ -72,7 +82,7 @@ abstract class AbstractBackendController
         // create list representation
         $representation = new ListRepresentation(
             $list,
-            'entities',
+            $this->getListName(),
             $request->get('_route'),
             $request->query->all(),
             $page,
@@ -148,21 +158,6 @@ abstract class AbstractBackendController
         }
 
         return $this->handleView($this->view($entity));
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function cgetFieldsAction(Request $request)
-    {
-        $fieldDescriptors = $this->getFieldDescriptors(
-            $this->getLocale($request),
-            $this->getFilters($request)
-        );
-
-        return $this->handleView($this->view($fieldDescriptors));
     }
 
     /**

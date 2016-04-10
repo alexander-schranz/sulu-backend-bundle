@@ -24,4 +24,9 @@ interface ManagerControllerInterface
      * @return string
      */
     public function getModelClass();
+
+    /**
+     * @return string
+     */
+    public function getListName();
 }

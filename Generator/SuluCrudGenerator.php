@@ -308,17 +308,18 @@ class SuluCrudGenerator extends Generator
         $entityNamespace = implode('\\', $parts);
 
         return array(
-            'bundle'            => $bundle->getName(),
-            'bundle_prefix'     => self::getBundlePrefix($bundle),
-            'bundle_namespace'  => self::getBundleNamespace($bundle),
-            'entity_pluralize'  => Inflector::pluralize($entity),
-            'js_bundle_name'    => self::getJSBundleName($bundle),
-            'entity'            => $entity,
-            'metadata'          => $metadata,
-            'entity_class'      => $entityClass,
-            'extended'          => $extended,
-            'namespace'         => $bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
+            'bundle' => $bundle->getName(),
+            'bundle_prefix' => self::getBundlePrefix($bundle),
+            'bundle_namespace' => self::getBundleNamespace($bundle),
+            'entity_pluralize' => Inflector::pluralize($entity),
+            'js_bundle_name' => self::getJSBundleName($bundle),
+            'entity' => $entity,
+            'metadata' => $metadata,
+            'entity_class' => $entityClass,
+            'extended' => $extended,
+            'namespace' => $bundle->getNamespace(),
+            'entity_namespace' => $entityNamespace,
+            'public_translations' => self::getPublicTranslations(),
         );
     }
 
@@ -350,5 +351,16 @@ class SuluCrudGenerator extends Generator
     protected static function getJSBundleName(BundleInterface $bundle)
     {
         return str_replace('_', '', self::getBundlePrefix($bundle));
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getPublicTranslations()
+    {
+        return [
+            'id', 'title', 'description', 'name', 'key', 'email', 'phone', 'changed', 'created', 'published', 'fax',
+            'note', 'all', 'disabled', 'public', 'visible', 'number', 'status'
+        ];
     }
 }

@@ -24,7 +24,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
              * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.list
              */
             NAVIGATE_LIST = function () {
-                return createEventName.call(this, 'list');
+                return createEventName.call(this, 'navigate-list');
             },
 
             /**
@@ -32,7 +32,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
              * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.to
              */
             NAVIGATE_TO = function () {
-                return createEventName.call(this, 'to');
+                return createEventName.call(this, 'navigate-to');
             },
 
             /**
@@ -40,7 +40,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
              * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.add
              */
             NAVIGATE_ADD = function () {
-                return createEventName.call(this, 'add');
+                return createEventName.call(this, 'navigate-add');
             },
 
             /**
