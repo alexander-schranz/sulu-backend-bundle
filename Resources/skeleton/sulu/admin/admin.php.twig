@@ -40,7 +40,7 @@ class {{ entity_class }}Admin extends Admin
         // add {{ entity }} navigation
         if ($securityChecker->hasPermission('{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}', 'view')) {
             $childItem = new NavigationItem('{{ bundle_prefix }}.{{ entity_pluralize|lower }}');
-            $childItem->setAction('{{ entity_pluralize|lower }}');
+            $childItem->setAction('{{ bundle_namespace }}/{{ entity_pluralize|lower }}');
             $navigationItem->addChild($childItem);
         }
 

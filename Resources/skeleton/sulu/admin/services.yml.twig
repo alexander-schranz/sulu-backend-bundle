@@ -15,7 +15,7 @@ services:
             - {{ entity|lower }}:
                 permission: {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }} # permission for this menu point
                 title: {{ bundle_prefix }}.{{ entity_pluralize|lower }} # menu title
-                action: {{ entity_pluralize|lower }} # menu routing action
+                action: {{ bundle_namespace }}/{{ entity_pluralize|lower }} # menu routing action
             - Sulu: # securityContexts
                 {{ entity }}:
                     - {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}

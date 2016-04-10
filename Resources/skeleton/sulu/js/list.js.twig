@@ -1,5 +1,154 @@
 /**
  * {% include 'sulu/comment.twig' %}
+
  */
 
-{# TODO #}
+define(['{{ js_bundle_name }}/collections/{{ entity_pluralize|lower }}'], function (Collections) {
+
+    'use strict';
+
+    var collections = new Collections();
+
+    var constants = {
+        toolbarSelector: '#{{ entity|lower  }}-toolbar',
+        listSelector: '#{{ entity|lower  }}-list',
+        lastClickedEventSettingsKey: '{{ js_bundle_name ~ entity|lower }}LastClicked',
+        endPointUrl: collections.url(),
+        toolbarKey: '{{ entity_pluralize|lower }}',
+        toolbarSearchFields: ['title'],
+        fieldsAction: collections.fieldsUrl(),
+        eventPrefix: '{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.',
+        translatePrefix: '{{ bundle_prefix }}.{{ entity_pluralize|lower }}.'
+    };
+
+    return {
+
+        view: true,
+
+        layout: {
+            content: {
+                width: 'max'
+            }
+        },
+
+        header: function () {
+            return {
+                title: constants.translatePrefix + 'title',
+                noBack: true,
+
+                toolbar: {
+                    languageChanger: {
+                        preSelected: this.options.language
+                    },
+                    buttons: {
+                        add: {},
+                        deleteSelected: {}
+                    }
+                }
+            };
+        },
+
+        initialize: function() {
+            this.sandbox.sulu.triggerDeleteSuccessLabel(constants.translatePrefix + 'success_delete');
+            this.bindCustomEvents();
+            this.render();
+        },
+
+        bindCustomEvents: function () {
+            this.sandbox.on('sulu.toolbar.add', this.add.bind(this));
+            this.sandbox.on('sulu.toolbar.delete', this.deleteSelected.bind(this));
+            this.sandbox.on('husky.datagrid.item.click', this.saveLastClickedEvent.bind(this));
+            this.sandbox.on('husky.datagrid.number.selections', this.activateDeleteButton.bind(this))
+        },
+
+        activateDeleteButton: function(selections) {
+            if (selections) {
+                this.sandbox.emit('sulu.header.toolbar.item.enable', 'deleteSelected', true);
+            } else {
+                this.sandbox.emit('sulu.header.toolbar.item.disable', 'deleteSelected', false);
+            }
+        },
+
+        /**
+         * Renders the component
+         */
+        render: function () {
+            this.sandbox.dom.html(this.$el,
+                '<div id="' + constants.toolbarSelector + '"></div>' +
+                '<div id="' + constants.listSelector + '"></div>'
+            );
+
+            // init list-toolbar and datagrid
+            this.sandbox.sulu.initListToolbarAndList.call(this, constants.toolbarKey, constants.fieldsAction,
+                {
+                    // options for the header (list-toolbar)
+                    el: this.$find(constants.toolbarSelector),
+                    template: 'default',
+                    instanceName: this.instanceName
+                },
+                {
+                    // options for the content (datagrid)
+                    el: this.$find(constants.listSelector),
+                    instanceName: this.instanceName,
+                    url: constants.endPointUrl + '?locale=' + this.options.language + '&flat=true',
+                    resultKey: constants.toolbarKey,
+                    searchFields: constants.toolbarSearchFields,
+                    viewOptions: {
+                        table: {
+                            icons: [
+                                {
+                                    column: 'id',
+                                    icon: 'pencil',
+                                    align: 'left',
+                                    callback: this.edit.bind(this)
+                                }
+                            ],
+                            rowClickSelect: true,
+                            highlightSelected: true,
+                            fullWidth: true
+                        }
+                    }
+                }
+            );
+        },
+
+        /**
+         * Navigates to the the form for adding a new collection
+         */
+        add: function () {
+            this.sandbox.emit(constants.eventPrefix + 'form-add');
+        },
+
+        /**
+         * Navigates to the form for editing an existing collection
+         * @param id
+         */
+        edit: function (id) {
+            this.saveLastClickedEvent(id);
+            this.sandbox.emit(constants.eventPrefix + 'form', id);
+        },
+
+        /**
+         * Saves an id as the last click event in the user-settings
+         * @param id {Number|String} the id of the event
+         */
+        saveLastClickedEvent: function (id) {
+            if (!!id) {
+                this.sandbox.sulu.saveUserSetting(constants.lastClickedEventSettingsKey, id);
+            }
+        },
+
+        /**
+         * Deletes all selected events
+         */
+        deleteSelected: function () {
+            this.sandbox.emit('husky.datagrid.items.get-selected', function (collections) {
+                this.sandbox.emit(constants.eventPrefix + 'delete', collections, function (deletedId) {
+                    this.sandbox.emit('husky.datagrid.record.remove', deletedId);
+                }.bind(this), function () {
+                    this.sandbox.emit('sulu.labels.success.show', constants.translatePrefix + 'delete.success', 'labels.success');
+                }.bind(this));
+            }.bind(this));
+        }
+    };
+});

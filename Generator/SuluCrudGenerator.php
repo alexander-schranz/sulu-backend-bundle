@@ -310,8 +310,9 @@ class SuluCrudGenerator extends Generator
         return array(
             'bundle'            => $bundle->getName(),
             'bundle_prefix'     => self::getBundlePrefix($bundle),
+            'bundle_namespace'  => self::getBundleNamespace($bundle),
             'entity_pluralize'  => Inflector::pluralize($entity),
-            'js_bundle_name'    => str_replace('_', '', self::getBundlePrefix($bundle)),
+            'js_bundle_name'    => self::getJSBundleName($bundle),
             'entity'            => $entity,
             'metadata'          => $metadata,
             'entity_class'      => $entityClass,
@@ -324,10 +325,30 @@ class SuluCrudGenerator extends Generator
     /**
      * @param BundleInterface $bundle
      *
-     * @return mixed
+     * @return string
      */
     protected static function getBundlePrefix(BundleInterface $bundle)
     {
         return str_replace('_bundle', '', Inflector::tableize($bundle->getName()));
+    }
+
+    /**
+     * @param BundleInterface $bundle
+     *
+     * @return string
+     */
+    protected static function getBundleNamespace(BundleInterface $bundle)
+    {
+        return explode('_', self::getBundlePrefix($bundle))[0];
+    }
+
+    /**
+     * @param BundleInterface $bundle
+     *
+     * @return string
+     */
+    protected static function getJSBundleName(BundleInterface $bundle)
+    {
+        return str_replace('_', '', self::getBundlePrefix($bundle));
     }
 }

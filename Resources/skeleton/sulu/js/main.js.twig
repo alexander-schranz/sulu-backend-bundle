@@ -1,5 +1,6 @@
 /**
  * {% include 'sulu/comment.twig' %}
+
  */
 
 require.config({
@@ -22,6 +23,6 @@ define({
             return sandbox.sulu.getUserSetting('contentLanguage') || sandbox.sulu.user.locale;
         }
 
-        {%- include 'sulu/js/main_routes.js.twig' %}
+{% include 'sulu/js/main_routes.js.twig' %}
     }
 });
