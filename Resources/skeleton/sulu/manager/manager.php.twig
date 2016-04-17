@@ -45,14 +45,14 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
      * EventManager constructor.
      *
      * @param EntityManagerInterface $entityManager
-     * @param {{ entity }}Repository ${{ entity|lower }}Repository
+     * @param {{ entity }}Repository ${{ entity|camelize }}Repository
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        {{ entity }}Repository ${{ entity|lower }}Repository
+        {{ entity }}Repository ${{ entity|camelize }}Repository
     ) {
         $this->entityManager = $entityManager;
-        $this->{{ entity|lower }}Repository = ${{ entity|lower }}Repository;
+        $this->{{ entity|camelize }}Repository = ${{ entity|camelize }}Repository;
     }
 {% endblock %}
 
@@ -94,9 +94,9 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
     public function save($data, $locale = null, $id = null)
     {
         if (!$id) {
-            ${{ entity|lower }} = new {{ entity }}();
+            ${{ entity|camelize }} = new {{ entity }}();
         } else {
-            ${{ entity|lower }} = $this->findById($id, $locale);
+            ${{ entity|camelize }} = $this->findById($id, $locale);
         }
 
 {% for column in metadata.columnNames if metadata.singleIdentifierFieldName != column %}
@@ -112,19 +112,19 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
             {% endif %}
         {% endif %}
 {% endspaceless %}
-        ${{ entity|lower }}->set{{ column[:1]|upper ~ column[1:] }}(self::getValue($data, '{{ column }}'{{ default }}));
+        ${{ entity|camelize }}->set{{ column[:1]|upper ~ column[1:] }}(self::getValue($data, '{{ column }}'{{ default }}));
 {% endfor %}
 
-        $this->entityManager->persist(${{ entity|lower }});
+        $this->entityManager->persist(${{ entity|camelize }});
         $this->entityManager->flush();
 
         if (!$id) {
             // to avoid lazy load of sub entities in the serializer reload whole object with sub entities from db
             // remove this when you don`t join anything in `findById`
-            ${{ entity|lower }} = $this->findById(${{ entity|lower }}->get{{ metadata.singleIdentifierFieldName|capitalize }}(), $locale);
+            ${{ entity|camelize }} = $this->findById(${{ entity|camelize }}->get{{ metadata.singleIdentifierFieldName|capitalize }}(), $locale);
         }
 
-        return ${{ entity|lower }};
+        return ${{ entity|camelize }};
     }
 {% endblock %}
 {% if extended %}

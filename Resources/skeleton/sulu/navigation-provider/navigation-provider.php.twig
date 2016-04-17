@@ -29,7 +29,7 @@ class {{ entity_class }}NavigationProvider implements ContentNavigationProviderI
 
         $navigationItems['detail'] = new ContentNavigationItem('{{ bundle_prefix|replace('_', '.') }}.navigation.details');
         $navigationItems['detail']->setAction('general');
-        $navigationItems['detail']->setComponent('{{ entity_pluralize|lower }}@{{ js_bundle_name }}');
+        $navigationItems['detail']->setComponent('{{ entity_pluralize|camelize }}@{{ js_bundle_name }}');
         $navigationItems['detail']->setComponentOptions([
             'display' => 'form',
             'content' => 'general',

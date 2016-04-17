@@ -48,7 +48,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
      */
     public function getSecurityContext()
     {
-        return '{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}';
+        return '{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}';
     }
 
 {% endblock %}
@@ -62,7 +62,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
      */
     public function getManager()
     {
-        return $this->get('{{ bundle_prefix }}.manager.{{ entity|lower }}');
+        return $this->get('{{ bundle_prefix }}.manager.{{ entity|snake_case }}');
     }
 
 {% endblock %}
@@ -83,7 +83,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
             '{{ column }}',
             '{{ column }}',
             {{ entity }}::class,
-            '{{ translatePrefix }}.{{ column|lower }}',
+            '{{ translatePrefix }}.{{ column|snake_case }}',
             [],
             false,
             true
@@ -96,7 +96,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
             '{{ column }}',
             '{{ column }}',
             {{ entity }}::class,
-            '{{ translatePrefix }}.{{ column|lower }}',
+            '{{ translatePrefix }}.{{ column|snake_case }}',
             [],
             false,
             false,
@@ -125,7 +125,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
      */
     public function getListName()
     {
-        return '{{ entity_pluralize|lower }}';
+        return '{{ entity_pluralize|snake_case }}';
     }
 {% endblock %}
 {% if extended %}

@@ -5,6 +5,7 @@ namespace L91\Sulu\Bundle\BackendBundle\Generator;
 
 use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use L91\Sulu\Bundle\BackendBundle\Twig\ConverterTwigExtension;
 use Sensio\Bundle\GeneratorBundle\Generator\Generator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -12,13 +13,26 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 class SuluCrudGenerator extends Generator
 {
     /**
-     * Constructor.
+     * SuluCrudGenerator constructor.
      *
-     * @param Filesystem $filesystem A Filesystem instance
+     * @param Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem)
-    {
+    public function __construct(
+        Filesystem $filesystem
+    ) {
         $this->filesystem  = $filesystem;
+    }
+
+    /**
+     * @return \Twig_Environment
+     */
+    public function getTwigEnvironment()
+    {
+        $twigEnvironment = parent::getTwigEnvironment();
+
+        $twigEnvironment->addExtension(new ConverterTwigExtension());
+
+        return $twigEnvironment;
     }
 
     /**

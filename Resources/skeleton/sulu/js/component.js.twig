@@ -3,69 +3,70 @@
 
  */
 
-define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
-    '{{ js_bundle_name }}/collections/{{ entity_pluralize|lower }}'], function (Model,  Collection) {
+define(['{{ js_bundle_name }}/model/{{ entity|snake_case('-') }}',
+    '{{ js_bundle_name }}/collections/{{ entity_pluralize|snake_case('-') }}'], function (Model,  Collection) {
 
     'use strict';
 
     var constants = {
-                listContainerId: '{{ entity|lower }}-list-container',
-                formContainerId: '{{ entity|lower }}-form-container',
-                rootUrl: '{{ entity_pluralize|lower }}/',
+                listContainerId: '{{ entity|snake_case('-') }}-list-container',
+                formContainerId: '{{ entity|snake_case('-') }}-form-container',
+                rootUrl: '{{ entity_pluralize|snake_case('-') }}/',
                 defaultTab: 'general',
-                formModule: '{{ entity_pluralize|lower }}/form@{{ js_bundle_name }}',
-                listModule: '{{ entity_pluralize|lower }}/list@{{ js_bundle_name }}'
+                formModule: '{{ entity_pluralize|snake_case('-') }}/form@{{ js_bundle_name }}',
+                listModule: '{{ entity_pluralize|snake_case('-') }}/list@{{ js_bundle_name }}'
             },
 
-            namespace = '{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.',
+{% set eventNameSpace = bundle_prefix|replace('_', '.') ~ '.' ~ entity_pluralize|snake_case %}
+            namespace = '{{ eventNameSpace }}.',
 
             /**
-             * listens on and navigates to {{ entity|lower }} list
-             * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.list
+             * listens on and navigates to entity list
+             * @event {{ eventNameSpace }}.list
              */
             NAVIGATE_LIST = function () {
                 return createEventName.call(this, 'navigate-list');
             },
 
             /**
-             * listens on and navigates to {{ entity|lower }}
-             * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.to
+             * listens on and navigates to entity
+             * @event {{ eventNameSpace }}.to
              */
             NAVIGATE_TO = function () {
                 return createEventName.call(this, 'navigate-to');
             },
 
             /**
-             * listens on and navigates to {{ entity|lower }} for adding
-             * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.add
+             * listens on and navigates to entity for adding
+             * @event {{ eventNameSpace }}.add
              */
             NAVIGATE_ADD = function () {
                 return createEventName.call(this, 'navigate-add');
             },
 
             /**
-             * emitted after a {{ entity|lower }} got changed
-             * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.changed
-             * @param {Object} the changed {{ entity|lower }} model
+             * emitted after a entity got changed
+             * @event {{ eventNameSpace }}.changed
+             * @param {Object} the changed entity model
              */
             CHANGED = function () {
                 return createEventName.call(this, 'changed');
             },
 
             /**
-             * listens on and saves a {{ entity|lower }}
-             * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.save
-             * @param {Object} the data of the {{ entity|lower }} to save
+             * listens on and saves a entity
+             * @event {{ eventNameSpace }}.save
+             * @param {Object} the data of the entity to save
              */
             SAVE = function () {
                 return createEventName.call(this, 'save');
             },
 
             /**
-             * listens on and deletes {{ entity_pluralize|lower }}
-             * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.delete
-             * @param {Array} an array of ids of the {{ entity_pluralize|lower }} to delete
-             * @param {Function} function to execute after every deleted {{ entity|lower }}
+             * listens on and deletes entities
+             * @event {{ eventNameSpace }}.delete
+             * @param {Array} an array of ids of the entities to delete
+             * @param {Function} function to execute after every deleted entities
              * @param {Function} function to execute after everything got deleted
              */
             DELETE = function () {
@@ -73,9 +74,9 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
             },
 
             /**
-             * emited when a single {{ entity|lower }} got deleted
-             * @event {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}.deleted
-             * @param {String|Number} the id of the deleted {{ entity|lower }}
+             * emited when a single entity got deleted
+             * @event {{ eventNameSpace }}.deleted
+             * @param {String|Number} the id of the deleted entity
              */
             DELETED = function () {
                 return createEventName.call(this, 'deleted');
@@ -99,7 +100,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
         },
 
         /**
-         * Helper function to get a {{ entity|lower }} model
+         * Helper function to get a entity model
          * @param id {String|Number} id of the model
          * @returns {Object} the backbone model
          */
@@ -137,22 +138,22 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
             this.sandbox.on('sulu.header.language-changed', this.languageChanged.bind(this));
             // tab changed
             this.sandbox.on('husky.tabs.header.item.select', this.tabChanged.bind(this));
-            // navigate to {{ entity|lower }} list
+            // navigate to {{ entity|camelize }} list
             this.sandbox.on(NAVIGATE_LIST.call(this), this.navigateToList.bind(this));
-            // navigate to {{ entity|lower }}
+            // navigate to {{ entity|camelize }}
             this.sandbox.on(NAVIGATE_TO.call(this), this.navigateTo.bind(this));
-            // navigate to {{ entity|lower }} for adding
+            // navigate to {{ entity|camelize }} for adding
             this.sandbox.on(NAVIGATE_ADD.call(this), this.navigateToAdd.bind(this));
-            // save a {{ entity|lower }}
+            // save a {{ entity|camelize }}
             this.sandbox.on(SAVE.call(this), this.save.bind(this));
-            // deletes more {{ entity_pluralize|lower }}
+            // deletes more {{ entity_pluralize|camelize }}
             this.sandbox.on(DELETE.call(this), this.deleteCollections.bind(this));
         },
 
         /**
-         * Saves data for an existing {{ entity|lower }}
+         * Saves data for an existing entity
          * @param data {Object} object with the data to update
-         * @param callback {Function} callback to call if {{ entity|lower }} has been saved
+         * @param callback {Function} callback to call if entity has been saved
          */
         save: function (data, callback) {
             var model = this.getModel(data.id);
@@ -164,7 +165,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
                     callback(result.toJSON(), true);
                 }.bind(this),
                 error: function (result, response) {
-                    this.sandbox.logger.log('Error while saving {{ entity|lower }}');
+                    this.sandbox.logger.log('Error while saving {{ entity|camelize }}');
                     callback(response.responseJSON, false);
                 }.bind(this)
             });
@@ -172,8 +173,8 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
 
         /**
          * Deletes an more models
-         * @param ids {Array} array of {{ entity|lower }} ids
-         * @param callback {Function} callback to execute after a single {{ entity|lower }} got deleted
+         * @param ids {Array} array of entity ids
+         * @param callback {Function} callback to execute after a single entity got deleted
          * @param finishedCallback {Function} callback to execute after everything got deleted
          */
         deleteCollections: function (ids, callback, finishedCallback) {
@@ -195,7 +196,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
                                 }
                             }.bind(this),
                             error: function () {
-                                this.sandbox.logger.log('Error while deleting a single {{ entity|lower }}');
+                                this.sandbox.logger.log('Error while deleting a single {{ entity|camelize }}');
                             }.bind(this)
                         });
                     }.bind(this));
@@ -204,15 +205,15 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
         },
 
         /**
-         * Navigates to the {{ entity|lower }} list
+         * Navigates to the entity list
          */
         navigateToList: function () {
             this.sandbox.emit('sulu.router.navigate', constants.rootUrl + this.options.language, true, true);
         },
 
         /**
-         * Navigates to the {{ entity|lower }} form
-         * @param id {Number|String} the id of the {{ entity|lower }} to edit
+         * Navigates to the entity form
+         * @param id {Number|String} the id of the entity to edit
          * @param tab {String} the tab to route to
          */
         navigateTo: function (id, tab) {
@@ -221,7 +222,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
         },
 
         /**
-         * Navigates to the {{ entity|lower }} for adding a new {{ entity|lower }}
+         * Navigates to the entity for adding a new entity
          * @param tab {String} the tab to route to
          */
         navigateToAdd: function (tab) {
@@ -284,7 +285,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|lower }}',
                         action(result.toJSON());
                     }.bind(this),
                     error: function () {
-                        this.sandbox.logger.log('Error while fetching a single {{ entity|lower }}');
+                        this.sandbox.logger.log('Error while fetching a single {{ entity|camelize }}');
                     }.bind(this)
                 });
             } else {

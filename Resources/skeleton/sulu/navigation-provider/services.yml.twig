@@ -1,5 +1,5 @@
 services:
-    {{ bundle_prefix }}.navigation_provider.{{ entity|lower }}:
+    {{ bundle_prefix }}.navigation_provider.{{ entity|snake_case }}:
 {% set class = 'L91\\Sulu\\Bundle\\BackendBundle\\Admin\\BackendNavigationProvider' %}
 {% if extended %}
     {%- set class = namespace ~ '\\Admin\\' ~ entity_class ~ 'NavigationProvider' %}
@@ -7,15 +7,15 @@ services:
         class: {{ class }}
 {% if not extended %}
         arguments:
-            - {{ entity|lower }}:
+            - {{ entity|snake_case }}:
                 title: {{ bundle_prefix|replace('_', '.') }}.navigation.details # tab title
                 action: general # tab action
-                component: {{ entity_pluralize|lower }}@{{ js_bundle_name }} # tab component
+                component: {{ entity_pluralize|camelize }}@{{ js_bundle_name }} # tab component
                 componentOptions: # tab component options
                     display: form
                     content: general
 
 {% endif %}
         tags:
-            - { name: sulu_admin.content_navigation, alias: {{ bundle_prefix }}_{{ entity|lower }} }
+            - { name: sulu_admin.content_navigation, alias: {{ bundle_prefix }}_{{ entity|snake_case }} }
             - { name: sulu.context, context: admin }

@@ -9,16 +9,16 @@ services:
             - '@sulu_security.security_checker'
             - '%sulu_admin.name%'
 {% if not extended %}
-            - '{{ bundle_prefix }}.{{ entity|lower }}' # title main navigation
+            - '{{ bundle_prefix }}.{{ entity|snake_case }}' # title main navigation
             - 'globe' # icon main navigation
             - '{{ js_bundle_name }}' # jsBundleName
-            - {{ entity|lower }}:
-                permission: {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }} # permission for this menu point
-                title: {{ bundle_prefix }}.{{ entity_pluralize|lower }} # menu title
-                action: {{ bundle_namespace }}/{{ entity_pluralize|lower }} # menu routing action
+            - {{ entity_pluralize|snake_case }}:
+                permission: {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }} # permission for this menu point
+                title: {{ bundle_prefix }}.{{ entity_pluralize|snake_case }} # menu title
+                action: {{ bundle_namespace }}/{{ entity_pluralize|snake_case }} # menu routing action
             - Sulu: # securityContexts
                 {{ entity }}:
-                    - {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|lower }}
+                    - {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}
 {% endif %}
         tags:
             - { name: sulu.admin }

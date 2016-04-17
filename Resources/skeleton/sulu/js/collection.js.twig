@@ -5,7 +5,7 @@
 
 define([
     'mvc/collection',
-    '{{ js_bundle_name }}/model/{{ entity|lower }}'
+    '{{ js_bundle_name }}/model/{{ entity|snake_case('-') }}'
 ], function (Collection, Model) {
 
     return Collection({
@@ -13,15 +13,15 @@ define([
         model: Model,
 
         url: function () {
-            return '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|lower }}';
+            return '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}';
         },
 
         fieldsUrl: function () {
-            return '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|lower }}/fields';
+            return '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}/fields';
         },
 
         parse: function (resp) {
-            return resp._embedded.{{ entity_pluralize|lower }};
+            return resp._embedded.{{ entity_pluralize|camelize }};
         }
     });
 });
