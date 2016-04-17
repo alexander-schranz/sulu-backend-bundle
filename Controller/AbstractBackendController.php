@@ -36,6 +36,16 @@ abstract class AbstractBackendController
      *
      * @return Response
      */
+    public function cgetTemplateAction(Request $request)
+    {
+        return $this->render($this->getBundleName() . ':' . $this->getListName() . ':template.html.twig');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function cgetAction(Request $request)
     {
         $locale = $this->getLocale($request);
@@ -54,6 +64,7 @@ abstract class AbstractBackendController
 
             // get fieldDescriptors
             $fieldDescriptors = $this->getFieldDescriptors($locale, $filters);
+
             $restHelper->initializeListBuilder($listBuilder, $fieldDescriptors);
 
             // load entities

@@ -42,7 +42,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endif %}
 {% endblock %}
 {
-{% block security_context %}
+{% block getSecurityContext %}
     /**
      * {@inheritdoc}
      */
@@ -52,7 +52,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
     }
 
 {% endblock %}
-{% block manager %}
+{% block getManager %}
     /**
 {% if extended %}
      * @return {{ entity }}Manager
@@ -66,7 +66,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
     }
 
 {% endblock %}
-{% block field_descriptors %}
+{% block getFieldDescriptors %}
     /**
      * @param string $locale
      * @param array $filters
@@ -77,30 +77,30 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
     {
         $fieldDescriptors = [];
 
-{% set column = metadata.singleIdentifierColumnName %}
-{% set translatePrefix = column in public_translations ? 'public' : bundle_prefix %}
-        $fieldDescriptors['{{ column }}'] = new DoctrineFieldDescriptor(
-            '{{ column }}',
-            '{{ column }}',
+{% set field = metadata.singleIdentifierFieldName %}
+{% set translatePrefix = field in public_translations ? 'public' : bundle_prefix %}
+        $fieldDescriptors['{{ metadata.getColumnName(field) }}'] = new DoctrineFieldDescriptor(
+            '{{ field }}',
+            '{{ metadata.getColumnName(field) }}',
             {{ entity }}::class,
-            '{{ translatePrefix }}.{{ column|snake_case }}',
+            '{{ translatePrefix }}.{{ field|snake_case }}',
             [],
             false,
             true
         );
 
-{% for column in metadata.columnNames if metadata.singleIdentifierColumnName != column %}
+{% for field in metadata.fieldNames if metadata.singleIdentifierFieldName != field %}
 {% block field_descriptor %}
-{% set translatePrefix = column in public_translations ? 'public' : bundle_prefix %}
-        $fieldDescriptors['{{ column }}'] = new DoctrineFieldDescriptor(
-            '{{ column }}',
-            '{{ column }}',
+{% set translatePrefix = field in public_translations ? 'public' : bundle_prefix %}
+        $fieldDescriptors['{{ metadata.getColumnName(field) }}'] = new DoctrineFieldDescriptor(
+            '{{ field }}',
+            '{{ metadata.getColumnName(field) }}',
             {{ entity }}::class,
-            '{{ translatePrefix }}.{{ column|snake_case }}',
+            '{{ translatePrefix }}.{{ field|snake_case }}',
             [],
             false,
             false,
-            {{ metadata.typeOfField(column) in ['date', 'datetime'] ? '\'date\'' : '\'\'' }}
+            {{ metadata.typeOfField(field) in ['date', 'datetime'] ? '\'date\'' : '\'\'' }}
         );
 {% endblock %}
 
@@ -109,7 +109,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
     }
 
 {% endblock %}
-{% block model_class %}
+{% block getModelClass %}
     /**
      * @return string
      */
@@ -119,13 +119,23 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
     }
 
 {% endblock %}
-{% block list_name %}
+{% block getListName %}
     /**
      * @return string
      */
     public function getListName()
     {
         return '{{ entity_pluralize|snake_case }}';
+    }
+
+{% endblock %}
+{% block getBundleName %}
+    /**
+    * @return string
+    */
+    public function getBundleName()
+    {
+        return '{{ bundle }}';
     }
 {% endblock %}
 {% if extended %}
@@ -283,6 +293,18 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         );
 
         return $this->handleView($this->view($fieldDescriptors));
+    }
+
+{% endblock %}
+{% block cgetTemplateAction %}
+    /**
+    * @param Request $request
+    *
+    * @return Response
+    */
+    public function cgetTemplateAction(Request $request)
+    {
+        return $this->render($this->getBundleName() . $this->getListName() . ':template.html.twig');
     }
 
 {% endblock %}

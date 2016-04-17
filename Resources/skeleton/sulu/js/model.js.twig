@@ -8,15 +8,15 @@ define(['mvc/relationalmodel'], function (relationalModel) {
     'use strict';
 
     return relationalModel({
-        urlRoot: '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}/{id}',
+        urlRoot: '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}',
 
         defaults: function() {
             return {
-{% for column in metadata.columnNames %}
-            {{ column }}: null{% if not loop.last %},{% endif %}
+{% for field in metadata.fieldNames %}
+                {{ field }}: null{% if not loop.last %},{% endif %}
 
 {% endfor %}
-        };
+            };
         }
     });
 });

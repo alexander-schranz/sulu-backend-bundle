@@ -55,15 +55,29 @@ class SuluCrudGenerator extends Generator
         $extended = false,
         $forceOverwrite = false
     ) {
-        $target = self::getTarget('%s/Controller/%s/%sController.php', $bundle, $entity);
+        $parameters = self::getParameters($bundle, $entity, $metadata, $extended);
 
-        if (!$forceOverwrite && file_exists($target)) {
+        // controller
+        $controllerTarget = self::getTarget('%s/Controller/%s/%sController.php', $bundle, $entity);
+
+        if (!$forceOverwrite && file_exists($controllerTarget)) {
             throw new \RuntimeException('Unable to generate the controller as it already exists.');
         }
 
-        $parameters = self::getParameters($bundle, $entity, $metadata, $extended);
+        $this->renderFile('sulu/controller/controller.php.twig', $controllerTarget, $parameters);
 
-        $this->renderFile('sulu/controller/controller.php.twig', $target, $parameters);
+        // template
+        $templateTarget = sprintf(
+            '%s/Resources/views/%s/template.html.twig',
+            $bundle->getPath(),
+            strtolower(Inflector::pluralize($entity))
+        );
+
+        if (!$forceOverwrite && file_exists($templateTarget)) {
+            throw new \RuntimeException('Unable to generate the template as it already exists.');
+        }
+
+        $this->renderFile('sulu/controller/template.html.twig.twig', $templateTarget, $parameters);
 
         return $this->render('sulu/controller/routing_api.yml.twig', $parameters);
     }
@@ -225,7 +239,7 @@ class SuluCrudGenerator extends Generator
 
         $this->renderFile('sulu/js/collection.js.twig', $collectionTarget, $parameters);
 
-        // collection
+        // model
         $modelTarget = sprintf(
             '%s/Resources/public/js/model/%s.js',
             $bundle->getPath(),
@@ -263,6 +277,19 @@ class SuluCrudGenerator extends Generator
         }
 
         $this->renderFile('sulu/js/list.js.twig', $listTarget, $parameters);
+
+        // tabs
+        $tabsTarget = sprintf(
+            '%s/Resources/public/js/components/%s/tabs/main.js',
+            $bundle->getPath(),
+            strtolower(Inflector::pluralize($entity))
+        );
+
+        if (!$forceOverwrite && file_exists($tabsTarget)) {
+            throw new \RuntimeException('Unable to generate the tabs js as it already exists.');
+        }
+
+        $this->renderFile('sulu/js/tabs.js.twig', $tabsTarget, $parameters);
 
         // form
         $formTarget = sprintf(

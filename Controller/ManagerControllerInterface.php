@@ -29,4 +29,9 @@ interface ManagerControllerInterface
      * @return string
      */
     public function getListName();
+
+    /**
+     * @return string
+     */
+    public function getBundleName();
 }

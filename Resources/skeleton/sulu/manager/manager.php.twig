@@ -99,20 +99,20 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
             ${{ entity|camelize }} = $this->findById($id, $locale);
         }
 
-{% for column in metadata.columnNames if metadata.singleIdentifierFieldName != column %}
+{% for field in metadata.fieldNames if metadata.singleIdentifierFieldName != field %}
 {% spaceless %}
-        {% set default = '' %}
-        {% if not metadata.fieldMappings[column]['nullable']|default(false) %}
-            {% if metadata.typeOfField(column) in ['date', 'datetime'] %}
-                {% set default = ', new \\DateTime()' %}
-            {% elseif  metadata.typeOfField(column) in ['integer', 'float', 'double', 'decimal'] %}
-                {% set default = ', 0' %}
-            {% else %}
-                {% set default = ', \'\'' %}
-            {% endif %}
+    {% set default = '' %}
+    {% if not metadata.fieldMappings[field]['nullable']|default(false) %}
+        {% if metadata.typeOfField(field) in ['date', 'datetime'] %}
+            {% set default = ', new \\DateTime(), \'date\'' %}
+        {% elseif  metadata.typeOfField(field) in ['integer', 'float', 'double', 'decimal'] %}
+            {% set default = ', 0' %}
+        {% else %}
+            {% set default = ', \'\'' %}
         {% endif %}
+    {% endif %}
 {% endspaceless %}
-        ${{ entity|camelize }}->set{{ column[:1]|upper ~ column[1:] }}(self::getValue($data, '{{ column }}'{{ default }}));
+        ${{ entity|camelize }}->set{{ field[:1]|upper ~ field[1:] }}(self::getValue($data, '{{ field }}'{{ default }}));
 {% endfor %}
 
         $this->entityManager->persist(${{ entity|camelize }});
@@ -153,12 +153,17 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
      * @param $data
      * @param $value
      * @param null $default
+     * @param string $type
      *
      * @return mixed
      */
-    protected static function getValue($data, $value, $default = null)
+    protected static function getValue($data, $value, $default = null, $type = null)
     {
         if (isset($data[$value])) {
+            if ($type === 'date') {
+                return new \DateTime($data[$value]);
+            }
+
             return $data[$value];
         }
 

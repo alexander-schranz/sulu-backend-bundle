@@ -1,0 +1,32 @@
+<form id="{{ entity|snake_case('-') }}-form">
+    <div class="grid">
+{% for field in metadata.fieldNames if metadata.singleIdentifierFieldName != field %}
+{% set translatePrefix = field in public_translations ? 'public' : bundle_prefix %}
+        <div class="grid-row m-bottom-40">
+            <div class="grid-col-12">
+                <div class="form-group">
+                    <label for="{{ field|snake_case('-') }}"><%= translate('{{ translatePrefix }}.{{ field|snake_case }}') %></label>
+
+                    <div id="{{ field|snake_case('-') }}-element" class="form-element"
+                           data-type="husky-input"
+                           data-aura-component="input@husky"
+                           data-form="true"
+                           data-trigger="focusout"
+                           data-mapper-property="{{ field }}"
+{% if not metadata.fieldMappings[field]['nullable']|default(false) %}
+                           data-validation-required="true"
+{% endif %}
+{% if metadata.typeOfField(field) in ['date', 'datetime'] %}
+                           data-aura-skin="date"
+{% endif %}
+                           data-aura-instance-name="{{ field }}"
+{% if loop.index0 == 0 %}
+                           autofocus
+{% endif %}
+                           />
+                </div>
+            </div>
+        </div>
+{% endfor %}
+    </div>
+</form>

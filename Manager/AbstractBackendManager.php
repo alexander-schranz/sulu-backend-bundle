@@ -76,13 +76,18 @@ abstract class AbstractBackendManager implements ManagerInterface
     /**
      * @param $data
      * @param $value
-     * @param null $default
+     * @param mixed $default
+     * @param string $type
      *
      * @return mixed
      */
-    protected static function getValue($data, $value, $default = null)
+    protected static function getValue($data, $value, $default = null, $type = null)
     {
         if (isset($data[$value])) {
+            if ($type === 'date') {
+                return new \DateTime($data[$value]);
+            }
+
             return $data[$value];
         }
 

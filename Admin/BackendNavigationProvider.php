@@ -38,6 +38,6 @@ class BackendNavigationProvider implements ContentNavigationProviderInterface
             }
         }
 
-        return $navigationItems;
+        return array_values($navigationItems);
     }
 }

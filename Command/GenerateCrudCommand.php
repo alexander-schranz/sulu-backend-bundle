@@ -54,6 +54,21 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
 
         $questionHelper = $this->getQuestionHelper();
 
+        // generate controller
+        $question = new ConfirmationQuestion(
+            $questionHelper->getQuestion('Do you want to generate a "Controller"', 'yes', '?'),
+            true
+        );
+
+        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
+            $controllerRegistration = $generator->generateController($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
+            $output->writeln(PHP_EOL . 'Controller generated, register the route with: ' . PHP_EOL);
+            $output->writeln(sprintf(
+                '<info>%s</info>',
+                $controllerRegistration
+            ));
+        }
+
         // generate js
         $question = new ConfirmationQuestion(
             $questionHelper->getQuestion('Do you want to generate the JS', 'yes', '?'),
@@ -107,21 +122,6 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
             $output->writeln(sprintf(
                 '<info>%s</info>',
                 $managerRegistration
-            ));
-        }
-
-        // generate controller
-        $question = new ConfirmationQuestion(
-            $questionHelper->getQuestion('Do you want to generate a "Controller"', 'yes', '?'),
-            true
-        );
-
-        if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $controllerRegistration = $generator->generateController($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'Controller generated, register the route with: ' . PHP_EOL);
-            $output->writeln(sprintf(
-                '<info>%s</info>',
-                $controllerRegistration
             ));
         }
 

@@ -9,87 +9,87 @@ define(['{{ js_bundle_name }}/model/{{ entity|snake_case('-') }}',
     'use strict';
 
     var constants = {
-                listContainerId: '{{ entity|snake_case('-') }}-list-container',
-                formContainerId: '{{ entity|snake_case('-') }}-form-container',
-                rootUrl: '{{ entity_pluralize|snake_case('-') }}/',
-                defaultTab: 'general',
-                formModule: '{{ entity_pluralize|snake_case('-') }}/form@{{ js_bundle_name }}',
-                listModule: '{{ entity_pluralize|snake_case('-') }}/list@{{ js_bundle_name }}'
-            },
+        listContainerId: '{{ entity|snake_case('-') }}-list-container',
+        formContainerId: '{{ entity|snake_case('-') }}-form-container',
+        rootUrl: '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}/',
+        defaultTab: 'general',
+        formModule: '{{ entity_pluralize|snake_case('-') }}/form@{{ js_bundle_name }}',
+        listModule: '{{ entity_pluralize|snake_case('-') }}/list@{{ js_bundle_name }}'
+    },
 
 {% set eventNameSpace = bundle_prefix|replace('_', '.') ~ '.' ~ entity_pluralize|snake_case %}
-            namespace = '{{ eventNameSpace }}.',
+    namespace = '{{ eventNameSpace }}.',
 
-            /**
-             * listens on and navigates to entity list
-             * @event {{ eventNameSpace }}.list
-             */
-            NAVIGATE_LIST = function () {
-                return createEventName.call(this, 'navigate-list');
-            },
+    /**
+     * listens on and navigates to entity list
+     * @event {{ eventNameSpace }}.list
+     */
+    NAVIGATE_LIST = function () {
+        return createEventName.call(this, 'navigate-list');
+    },
 
-            /**
-             * listens on and navigates to entity
-             * @event {{ eventNameSpace }}.to
-             */
-            NAVIGATE_TO = function () {
-                return createEventName.call(this, 'navigate-to');
-            },
+    /**
+     * listens on and navigates to entity
+     * @event {{ eventNameSpace }}.to
+     */
+    NAVIGATE_TO = function () {
+        return createEventName.call(this, 'navigate-to');
+    },
 
-            /**
-             * listens on and navigates to entity for adding
-             * @event {{ eventNameSpace }}.add
-             */
-            NAVIGATE_ADD = function () {
-                return createEventName.call(this, 'navigate-add');
-            },
+    /**
+     * listens on and navigates to entity for adding
+     * @event {{ eventNameSpace }}.add
+     */
+    NAVIGATE_ADD = function () {
+        return createEventName.call(this, 'navigate-add');
+    },
 
-            /**
-             * emitted after a entity got changed
-             * @event {{ eventNameSpace }}.changed
-             * @param {Object} the changed entity model
-             */
-            CHANGED = function () {
-                return createEventName.call(this, 'changed');
-            },
+    /**
+     * emitted after a entity got changed
+     * @event {{ eventNameSpace }}.changed
+     * @param {Object} the changed entity model
+     */
+    CHANGED = function () {
+        return createEventName.call(this, 'changed');
+    },
 
-            /**
-             * listens on and saves a entity
-             * @event {{ eventNameSpace }}.save
-             * @param {Object} the data of the entity to save
-             */
-            SAVE = function () {
-                return createEventName.call(this, 'save');
-            },
+    /**
+     * listens on and saves a entity
+     * @event {{ eventNameSpace }}.save
+     * @param {Object} the data of the entity to save
+     */
+    SAVE = function () {
+        return createEventName.call(this, 'save');
+    },
 
-            /**
-             * listens on and deletes entities
-             * @event {{ eventNameSpace }}.delete
-             * @param {Array} an array of ids of the entities to delete
-             * @param {Function} function to execute after every deleted entities
-             * @param {Function} function to execute after everything got deleted
-             */
-            DELETE = function () {
-                return createEventName.call(this, 'delete');
-            },
+    /**
+     * listens on and deletes entities
+     * @event {{ eventNameSpace }}.delete
+     * @param {Array} an array of ids of the entities to delete
+     * @param {Function} function to execute after every deleted entities
+     * @param {Function} function to execute after everything got deleted
+     */
+    DELETE = function () {
+        return createEventName.call(this, 'delete');
+    },
 
-            /**
-             * emited when a single entity got deleted
-             * @event {{ eventNameSpace }}.deleted
-             * @param {String|Number} the id of the deleted entity
-             */
-            DELETED = function () {
-                return createEventName.call(this, 'deleted');
-            },
+    /**
+     * emited when a single entity got deleted
+     * @event {{ eventNameSpace }}.deleted
+     * @param {String|Number} the id of the deleted entity
+     */
+    DELETED = function () {
+        return createEventName.call(this, 'deleted');
+    },
 
-            /** returns normalized event names */
-            createEventName = function (postFix) {
-                return namespace + postFix;
-            };
+    /** returns normalized event names */
+    createEventName = function (postFix) {
+        return namespace + postFix;
+    };
 
     return {
         collection: new Collection(),
-        locale: null,
+        language: null,
 
         /**
          * Initializes the component
@@ -233,9 +233,9 @@ define(['{{ js_bundle_name }}/model/{{ entity|snake_case('-') }}',
 
         /**
          * Renders the list-component
-         * @param locale {String} the locale in which the event gets loaded. can be undefined
+         * @param language {String} the locale in which the event gets loaded. can be undefined
          */
-        renderList: function (locale) {
+        renderList: function (language) {
             var $list = this.sandbox.dom.createElement('<div id="' + constants.listContainerId + '"/>');
             this.html($list);
             this.sandbox.start([
@@ -243,7 +243,7 @@ define(['{{ js_bundle_name }}/model/{{ entity|snake_case('-') }}',
                     name: constants.listModule,
                     options: {
                         el: $list,
-                        language: locale
+                        language: language
                     }
                 }
             ]);
@@ -295,10 +295,10 @@ define(['{{ js_bundle_name }}/model/{{ entity|snake_case('-') }}',
 
         /**
          * Handles the language change
-         * @param locale
+         * @param language {String}
          */
-        languageChanged: function(locale) {
-            this.options.language = locale.id;
+        languageChanged: function(language) {
+            this.options.language = language.id;
             if (this.options.display === 'list') {
                 this.navigateToList();
             } else if (this.options.display === 'form') {

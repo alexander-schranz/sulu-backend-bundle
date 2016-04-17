@@ -32,7 +32,7 @@ class BackendRepository extends EntityRepository implements BackendRepositoryInt
     {
         return $this->findBy(
             [],
-            'id',
+            ['id' => 'asc'],
             self::getValue($filters, 'limit'),
             self::getValue($filters, 'offset')
         );
