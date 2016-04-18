@@ -3,8 +3,8 @@
 
  */
 
-define(['{{ js_bundle_name }}/model/{{ entity|snake_case('-') }}',
-    '{{ js_bundle_name }}/collections/{{ entity_pluralize|snake_case('-') }}'], function (Model,  Collection) {
+define(['mvc/relationalmodel',
+    'mvc/collection'], function (Model,  Collection) {
 
     'use strict';
 

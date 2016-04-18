@@ -3,20 +3,18 @@
 
  */
 
-define(['{{ js_bundle_name }}/collections/{{ entity_pluralize|snake_case('-') }}'], function (Collections) {
+define([], function () {
 
     'use strict';
-
-    var collections = new Collections();
 
     var constants = {
         toolbarId: '{{ entity|snake_case('-')  }}-toolbar',
         listId: '{{ entity|snake_case('-')  }}-list',
         lastClickedEventSettingsKey: '{{ js_bundle_name ~ entity|camelize }}LastClicked',
-        endPointUrl: collections.url(),
+        endPointUrl: '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}',
         toolbarKey: '{{ entity_pluralize|snake_case('-') }}',
         toolbarSearchFields: ['title'],
-        fieldsAction: collections.fieldsUrl(),
+        fieldsAction: '/admin/api/{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}/fields',
         eventPrefix: '{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}.',
         translatePrefix: '{{ bundle_prefix }}.{{ entity_pluralize|snake_case }}.'
     };
