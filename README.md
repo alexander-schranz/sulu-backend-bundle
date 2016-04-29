@@ -64,3 +64,5 @@ You can easily generate them with following command:
 ```bash
 app/console l91:sulu:backend:generate:crud YourBundle:Vehicle
 ```
+
+Add `--extended` to have no requirements to this Bundle.
