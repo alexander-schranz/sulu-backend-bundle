@@ -66,3 +66,13 @@ app/console l91:sulu:backend:generate:crud YourBundle:Vehicle
 ```
 
 Add `--extended` to have no requirements to this Bundle.
+
+# Command List
+
+You can also just generate a specific part with the following commands:
+
+ - `app/console l91:sulu:backend:generate:controller`
+ - `app/console l91:sulu:backend:generate:manager`
+ - `app/console l91:sulu:backend:generate:admin`
+ - `app/console l91:sulu:backend:generate:js`
+ - `app/console l91:sulu:backend:generate:navigation-provider`
