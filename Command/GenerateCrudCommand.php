@@ -2,17 +2,15 @@
 
 namespace L91\Sulu\Bundle\BackendBundle\Command;
 
-use L91\Sulu\Bundle\BackendBundle\Generator\SuluCrudGenerator;
-use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineCommand;
-use Sensio\Bundle\GeneratorBundle\Command\Validators;
+use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
-class GenerateCrudCommand extends GenerateDoctrineCommand
+class GenerateCrudCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -28,30 +26,23 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
     }
 
     /**
+     * @return QuestionHelper|\Symfony\Component\Console\Helper\HelperInterface
+     */
+    protected function getQuestionHelper()
+    {
+        $question = $this->getHelperSet()->get('question');
+        if (!$question || get_class($question) !== 'Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper') {
+            $this->getHelperSet()->set($question = new QuestionHelper());
+        }
+
+        return $question;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Force Overwrite
-        $forceOverwrite = $input->getOption('force');
-
-        // Generate Extended Classes
-        $extended = $input->getOption('extended');
-
-        // get entity data
-        $entity = $input->getArgument('entity');
-
-        $entity = Validators::validateEntityName($entity);
-        list($bundle, $entity) = $this->parseShortcutNotation($entity);
-
-        $entityClass = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle) . '\\' . $entity;
-        $metadata = $this->getEntityMetadata($entityClass);
-
-        $bundle = $this->getContainer()->get('kernel')->getBundle($bundle);
-
-        /** @var SuluCrudGenerator $generator */
-        $generator = $this->getGenerator($bundle);
-
         $questionHelper = $this->getQuestionHelper();
 
         // generate controller
@@ -61,12 +52,8 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
         );
 
         if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $controllerRegistration = $generator->generateController($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'Controller generated, register the route with: ' . PHP_EOL);
-            $output->writeln(sprintf(
-                '<info>%s</info>',
-                $controllerRegistration
-            ));
+            $application = $this->getApplication()->find('l91:sulu:backend:generate:controller');
+            $application->run($input, $output);
         }
 
         // generate js
@@ -76,8 +63,8 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
         );
 
         if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $generator->generateJS($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'JS successfully generated: ' . PHP_EOL);
+            $application = $this->getApplication()->find('l91:sulu:backend:generate:js');
+            $application->run($input, $output);
         }
 
         // generate content navigation provider
@@ -87,12 +74,8 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
         );
 
         if ($input->isInteractive() && $questionHelper->ask($input, $output, $question)) {
-            $adminRegistration = $generator->generateNavigationProvider($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'Navigation provider generated, register the Admin with: ' . PHP_EOL);
-            $output->writeln(sprintf(
-                '<info>%s</info>',
-                $adminRegistration
-            ));
+            $application = $this->getApplication()->find('l91:sulu:backend:generate:navigation-provider');
+            $application->run($input, $output);
         }
 
         // generate admin navigation
@@ -102,12 +85,8 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
         );
 
         if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $adminRegistration = $generator->generateAdmin($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'Admin generated, register the admin with: ' . PHP_EOL);
-            $output->writeln(sprintf(
-                '<info>%s</info>',
-                $adminRegistration
-            ));
+            $application = $this->getApplication()->find('l91:sulu:backend:generate:admin');
+            $application->run($input, $output);
         }
 
         // generate manager
@@ -117,33 +96,10 @@ class GenerateCrudCommand extends GenerateDoctrineCommand
         );
 
         if (!$input->isInteractive() || $questionHelper->ask($input, $output, $question)) {
-            $managerRegistration = $generator->generateManager($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
-            $output->writeln(PHP_EOL . 'Manager generated, register the manager with: ' . PHP_EOL);
-            $output->writeln(sprintf(
-                '<info>%s</info>',
-                $managerRegistration
-            ));
+            $application = $this->getApplication()->find('l91:sulu:backend:generate:manager');
+            $application->run($input, $output);
         }
 
         $output->writeln(PHP_EOL . '<info>Generator finished</info>');
-    }
-
-    /**
-     * @return SuluCrudGenerator
-     */
-    protected function createGenerator()
-    {
-        return new SuluCrudGenerator($this->getContainer()->get('filesystem'));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSkeletonDirs(BundleInterface $bundle = null)
-    {
-        $dirs = parent::getSkeletonDirs($bundle);
-        $dirs[] = __DIR__ . '/../Resources/skeleton';
-
-        return $dirs;
     }
 }
