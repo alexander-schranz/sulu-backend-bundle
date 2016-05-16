@@ -8,15 +8,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 class SuluAdminGenerator extends AbstractSuluGenerator
 {
     /**
-     * @param BundleInterface $bundle
-     * @param $entity
-     * @param ClassMetadataInfo $metadata
-     * @param bool $extended
-     * @param bool $forceOverwrite
-     *
-     * @throws \RuntimeException
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function generate(
         BundleInterface $bundle,
