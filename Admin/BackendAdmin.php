@@ -41,7 +41,7 @@ class BackendAdmin extends Admin
         $rootNavigationItem = new NavigationItem($title);
 
         // parent navigation
-        $section = new NavigationItem('');
+        $section = new NavigationItem('navigation.modules');
 
         // create section
         $navigationItem = new NavigationItem($navigationTitle);
@@ -49,9 +49,12 @@ class BackendAdmin extends Admin
         $section->addChild($navigationItem);
 
         // add child navigation
+        $counter = 0;
         foreach ($children as $child) {
+            $counter++;
             if ($this->securityChecker->hasPermission($child['permission'], 'view')) {
                 $childItem = new NavigationItem($child['title']);
+                $childItem->setPosition($counter);
                 $childItem->setAction($child['action']);
                 $navigationItem->addChild($childItem);
             }

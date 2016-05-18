@@ -30,7 +30,7 @@ class {{ entity_class }}Admin extends Admin
         $rootNavigationItem = new NavigationItem($title);
 
         // parent navigation
-        $section = new NavigationItem('');
+        $section = new NavigationItem('navigation.modules');
 
         // create section
         $navigationItem = new NavigationItem('{{ bundle_prefix }}.{{ entity|snake_case }}');
@@ -41,6 +41,7 @@ class {{ entity_class }}Admin extends Admin
         if ($securityChecker->hasPermission('{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}', 'view')) {
             $childItem = new NavigationItem('{{ bundle_prefix }}.{{ entity_pluralize|snake_case }}');
             $childItem->setAction('{{ bundle_namespace }}/{{ entity_pluralize|snake_case }}');
+            $childItem->setPosition(10);
             $navigationItem->addChild($childItem);
         }
 
