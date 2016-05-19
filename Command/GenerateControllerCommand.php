@@ -28,4 +28,12 @@ class GenerateControllerCommand extends AbstractGenerateCommand
     {
         return new SuluControllerGenerator($this->getContainer()->get('filesystem'));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRegistrationMessage()
+    {
+        return 'Controller generated, register the route with: ';
+    }
 }

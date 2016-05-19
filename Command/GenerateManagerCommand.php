@@ -28,4 +28,12 @@ class GenerateManagerCommand extends AbstractGenerateCommand
     {
         return new SuluManagerGenerator($this->getContainer()->get('filesystem'));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRegistrationMessage()
+    {
+        return 'Manager generated, register the manager with: ';
+    }
 }

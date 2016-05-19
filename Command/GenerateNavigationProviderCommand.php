@@ -22,10 +22,18 @@ class GenerateNavigationProviderCommand extends AbstractGenerateCommand
     }
 
     /**
-     * @return SuluJSGenerator
+     * @return SuluNavigationProviderGenerator
      */
     protected function createGenerator()
     {
         return new SuluNavigationProviderGenerator($this->getContainer()->get('filesystem'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRegistrationMessage()
+    {
+        return 'Navigation provider generated, register the Admin with';
     }
 }

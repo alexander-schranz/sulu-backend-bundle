@@ -28,4 +28,12 @@ class GenerateAdminCommand extends AbstractGenerateCommand
     {
         return new SuluAdminGenerator($this->getContainer()->get('filesystem'));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRegistrationMessage()
+    {
+        return 'Admin generated, register the admin with: ';
+    }
 }

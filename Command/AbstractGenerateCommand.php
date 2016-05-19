@@ -12,6 +12,14 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 abstract class AbstractGenerateCommand extends GenerateDoctrineCommand
 {
     /**
+     * @return string
+     */
+    protected function getRegistrationMessage()
+    {
+        return 'Nothing to register.';
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -42,11 +50,13 @@ abstract class AbstractGenerateCommand extends GenerateDoctrineCommand
         $registration = $generator->generate($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
 
         $output->writeln(sprintf(
+            '%s' . PHP_EOL . PHP_EOL .
             '<info>%s</info>',
+            $this->getRegistrationMessage(),
             $registration
         ));
 
-        $output->writeln(PHP_EOL . '<info>Generator "' . $this->getName() . '" finished</info>');
+        $output->writeln(PHP_EOL . 'Generator "' . $this->getName() . '" finished!' . PHP_EOL . PHP_EOL);
     }
 
     /**
