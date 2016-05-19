@@ -13,6 +13,12 @@ the knowledge of husky the sulu javascript framework.
 composer require l91/sulu-backend-bundle
 ```
 
+**Add Bundle to AdminKernel**
+
+```php
+$bundles[] = new L91\Sulu\Bundle\BackendBundle\L91SuluBackendBundle();
+```
+
 # Usage
 
 As example we will create a API for an entity called Vehicle.
@@ -24,13 +30,13 @@ First create the doctrine entity with a `.orm.xml`.
 ## 2. Create Repository
 
 Create a Repository for loading entities from the database.
-The `BackendRepository` have a default implementation for:
+The `BackendRepository` have a default implementation for them:
 
  - `findById`
  - `findAll`
  - `count`
-
-If you want to overwrite them all you can just implement the `BackendRepositoryInterface`. 
+ 
+Create the functions in your repository or extend from the BackendRepository.
 
 ```php
 <?php
@@ -65,7 +71,8 @@ You can easily generate them with following command:
 app/console l91:sulu:backend:generate:crud YourBundle:Vehicle
 ```
 
-Add `--extended` to have no requirements to this Bundle.
+Add `--extended` to have no requirements to this Bundle. This will generate a complete own Controller, Manager, ...
+when use the extended generation you could remove this bundle from your requirements after you generated your bundle.
 
 # Command List
 
