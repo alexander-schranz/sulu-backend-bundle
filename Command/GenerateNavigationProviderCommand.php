@@ -26,6 +26,6 @@ class GenerateNavigationProviderCommand extends AbstractGenerateCommand
      */
     protected function createGenerator()
     {
-        return new SuluJSGenerator($this->getContainer()->get('filesystem'));
+        return new SuluNavigationProviderGenerator($this->getContainer()->get('filesystem'));
     }
 }
