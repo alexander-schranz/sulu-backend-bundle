@@ -47,6 +47,32 @@ class SuluJSGenerator extends AbstractSuluGenerator
 
         $this->renderFile('sulu/js/main.js.twig', $mainTarget, $parameters);
 
+        // collection
+        $collectionTarget = sprintf(
+            '%s/Resources/public/js/collections/%s.js',
+            $bundle->getPath(),
+            strtolower(Inflector::pluralize($entity))
+        );
+
+        if (!$forceOverwrite && file_exists($collectionTarget)) {
+            throw new \RuntimeException('Unable to generate the collection js as it already exists.');
+        }
+
+        $this->renderFile('sulu/js/collection.js.twig', $collectionTarget, $parameters);
+
+        // model
+        $modelTarget = sprintf(
+            '%s/Resources/public/js/model/%s.js',
+            $bundle->getPath(),
+            strtolower($entity)
+        );
+
+        if (!$forceOverwrite && file_exists($modelTarget)) {
+            throw new \RuntimeException('Unable to generate the model js as it already exists.');
+        }
+
+        $this->renderFile('sulu/js/model.js.twig', $modelTarget, $parameters);
+
         // component
         $componentTarget = sprintf(
             '%s/Resources/public/js/components/%s/main.js',

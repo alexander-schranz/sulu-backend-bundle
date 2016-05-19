@@ -2,7 +2,7 @@
 
 namespace L91\Sulu\Bundle\BackendBundle\Command;
 
-use L91\Sulu\Bundle\BackendBundle\Generator\SuluJSGenerator;
+use L91\Sulu\Bundle\BackendBundle\Generator\SuluNavigationProviderGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
