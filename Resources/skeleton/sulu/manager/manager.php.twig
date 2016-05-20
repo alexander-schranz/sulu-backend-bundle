@@ -93,6 +93,7 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
      */
     public function save($data, $locale = null, $id = null)
     {
+        // find exist or create new entity
         if (!$id) {
             ${{ entity|camelize }} = new {{ entity }}();
         } else {
@@ -110,11 +111,16 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
         {% else %}
             {% set default = ', \'\'' %}
         {% endif %}
+    {% else %}
+        {% if metadata.typeOfField(field) in ['date', 'datetime'] %}
+            {% set default = ', null, \'date\'' %}
+        {% endif %}
     {% endif %}
 {% endspaceless %}
+        // {{ field }}
         ${{ entity|camelize }}->set{{ field[:1]|upper ~ field[1:] }}(self::getValue($data, '{{ field }}'{{ default }}));
-{% endfor %}
 
+{% endfor %}
         $this->entityManager->persist(${{ entity|camelize }});
         $this->entityManager->flush();
 
@@ -161,6 +167,10 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
     {
         if (isset($data[$value])) {
             if ($type === 'date') {
+                if (!$data[$value]) {
+                    return $default;
+                }
+
                 return new \DateTime($data[$value]);
             }
 

@@ -85,6 +85,10 @@ abstract class AbstractBackendManager implements ManagerInterface
     {
         if (isset($data[$value])) {
             if ($type === 'date') {
+                if (!$data[$value]) {
+                    return $default;
+                }
+
                 return new \DateTime($data[$value]);
             }
 
