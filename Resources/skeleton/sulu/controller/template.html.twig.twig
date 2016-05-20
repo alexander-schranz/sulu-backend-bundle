@@ -6,24 +6,38 @@
             <div class="grid-col-12">
                 <div class="form-group">
                     <label for="{{ field|snake_case('-') }}"><%= translate('{{ translatePrefix }}.{{ field|snake_case }}') %></label>
+{% if metadata.typeOfField(field) in ['text'] %}
 
-                    <div id="{{ field|snake_case('-') }}-element" class="form-element"
-                           data-type="husky-input"
-                           data-aura-component="input@husky"
-                           data-form="true"
-                           data-trigger="focusout"
-                           data-mapper-property="{{ field }}"
+                    <textarea id="{{ field|snake_case('-') }}" class="form-element hidden husky-validate"
+                        data-type="textEditor"
+                        data-aura-component="ckeditor@husky"
+                        data-form="true"
+                        data-trigger="focusout"
+                        data-aura-link="true"
+                        data-mapper-property="{{ field }}"
 {% if not metadata.fieldMappings[field]['nullable']|default(false) %}
-                           data-validation-required="true"
+                        data-validation-required="true"
+{% endif %}
+                        data-aura-instance-name="{{ field }}"></textarea>
+{% else %}
+                    <div id="{{ field|snake_case('-') }}-element" class="form-element husky-validate"
+                       data-type="husky-input"
+                       data-aura-component="input@husky"
+                       data-form="true"
+                       data-trigger="focusout"
+                       data-mapper-property="{{ field }}"
+{% if not metadata.fieldMappings[field]['nullable']|default(false) %}
+                       data-validation-required="true"
 {% endif %}
 {% if metadata.typeOfField(field) in ['date', 'datetime'] %}
-                           data-aura-skin="date"
+                       data-aura-skin="date"
 {% endif %}
-                           data-aura-instance-name="{{ field }}"
+                       data-aura-instance-name="{{ field }}"
 {% if loop.index0 == 0 %}
-                           autofocus
+                       autofocus
 {% endif %}
-                           />
+                       />
+{% endif %}
                 </div>
             </div>
         </div>
