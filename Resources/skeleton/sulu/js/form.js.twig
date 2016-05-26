@@ -84,7 +84,10 @@ define(function () {
          * Binds sandbox and dom events for active tab
          */
         bindFormEvents: function () {
-            this.sandbox.dom.on(this.getActiveFormSelector(), 'change keyup', this.activateSaveButton.bind(this));
+            var formSelector = this.getActiveFormSelector();
+
+            this.sandbox.dom.on(formSelector, 'keyup', this.activateSaveButton.bind(this), 'input, textarea');
+            this.sandbox.dom.on(formSelector, 'change', this.activateSaveButton.bind(this), 'input[type="checkbox"], select');
             this.sandbox.on('husky.ckeditor.changed', this.activateSaveButton.bind(this));
             this.sandbox.on('sulu.content.changed', this.activateSaveButton.bind(this));
         },
