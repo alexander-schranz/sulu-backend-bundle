@@ -68,7 +68,7 @@ services:
 You can easily generate them with following command:
 
 ```bash
-app/console l91:sulu:backend:generate:crud YourBundle:Vehicle
+app/console l91:sulu:backend:generate:crud YourBundle:Vehicle --route-format yml --service-format yml
 ```
 
 Add `--extended` to have no requirements to this Bundle. This will generate a complete own Controller, Manager, ...

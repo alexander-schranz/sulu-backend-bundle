@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+{% set class = 'L91\\Sulu\\Bundle\\BackendBundle\\Admin\\BackendAdmin' %}
+{% if extended %}
+    {%- set class = namespace ~ '\\Admin\\' ~ entity_class ~ 'Admin' %}
+{% endif %}
+    <services>
+        <service id="{{ bundle_prefix }}.admin"
+                 class="{{ class }}">
+                <argument id="sulu_security.security_checker" type="service" />
+                <argument>%sulu_admin.name%</argument>
+{% if not extended %}
+                <argument>{{ bundle_prefix }}.{{ entity|snake_case }}</argument>
+                <argument>globe</argument>
+                <argument>{{ js_bundle_name }}</argument>
+                <argument type="collection">
+                    <argument key="{{ entity_pluralize|snake_case }}" type="collection">
+                        <argument key="permission">{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}</argument>
+                        <argument key="title">{{ bundle_prefix }}.{{ entity_pluralize|snake_case }}</argument>
+                        <argument key="action">{{ bundle_namespace }}/{{ entity_pluralize|snake_case }}</argument>
+                    </argument>
+                </argument>
+                <argument type="collection">
+                    <argument key="Sulu" type="collection">
+                        <argument key="Blackriver" type="collection">
+                            <argument>{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}</argument>
+                        </argument>
+                    </argument>
+                </argument>
+{% endif %}
+
+            <tag name="sulu.admin" />
+            <tag name="sulu.context" context="admin" />
+        </service>
+    </services>
+</container>

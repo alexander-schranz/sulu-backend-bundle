@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="{{ bundle_prefix }}.manager.{{ entity|snake_case }}"
+                 class="{{ namespace }}\Manager{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}Manager">
+            <argument id="doctrine.orm.default_entity_manager" type="service" />
+            <argument id="{{ bundle_prefix }}.repository.{{ entity|snake_case }}" type="service" />
+        </service>
+    </services>
+</container>

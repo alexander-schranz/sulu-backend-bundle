@@ -14,6 +14,8 @@ class SuluManagerGenerator extends AbstractSuluGenerator
         BundleInterface $bundle,
         $entity,
         ClassMetadataInfo $metadata,
+        $serviceFormat = 'yml',
+        $routeFormat = 'yml',
         $extended = false,
         $forceOverwrite = false
     ) {
@@ -27,6 +29,6 @@ class SuluManagerGenerator extends AbstractSuluGenerator
 
         $this->renderFile('sulu/manager/manager.php.twig', $target, $parameters);
 
-        return $this->render('sulu/manager/services.yml.twig', $parameters);
+        return $this->render('sulu/manager/services.' . $serviceFormat . '.twig', $parameters);
     }
 }
