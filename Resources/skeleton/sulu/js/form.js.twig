@@ -155,7 +155,7 @@ define(function () {
                 this.sandbox.emit('sulu.header.toolbar.item.disable', 'save', true);
                 this.saved = true;
                 if (toEdit === true) {
-                    this.sandbox.emit(eventPrefix + 'form', result.id);
+                    this.sandbox.emit(eventPrefix + 'navigate-to', result.id);
                 }
                 this.sandbox.emit('sulu.labels.success.show', translatePrefix + 'save.success', 'labels.success');
             } else {
