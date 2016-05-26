@@ -14,6 +14,8 @@ class SuluNavigationProviderGenerator extends AbstractSuluGenerator
         BundleInterface $bundle,
         $entity,
         ClassMetadataInfo $metadata,
+        $serviceFormat = 'yml',
+        $routeFormat = 'yml',
         $extended = false,
         $forceOverwrite = false
     ) {
@@ -29,6 +31,6 @@ class SuluNavigationProviderGenerator extends AbstractSuluGenerator
             $this->renderFile('sulu/navigation-provider/navigation-provider.php.twig', $target, $parameters);
         }
 
-        return $this->render('sulu/navigation-provider/services.yml.twig', $parameters);
+        return $this->render('sulu/navigation-provider/services.' . $serviceFormat . '.twig', $parameters);
     }
 }

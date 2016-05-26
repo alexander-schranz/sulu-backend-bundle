@@ -33,6 +33,21 @@ abstract class AbstractGenerateCommand extends GenerateDoctrineCommand
         // get entity data
         $entity = $input->getArgument('entity');
 
+        // get service format
+        $serviceFormat = $input->getArgument('service-format');
+
+        if (!$serviceFormat) {
+            $serviceFormat = 'yml';
+        }
+
+        // get route format
+        $routeFormat = $input->getArgument('route-format');
+
+        if (!$routeFormat) {
+            $routeFormat = 'yml';
+        }
+
+        // Get entity data
         $entity = Validators::validateEntityName($entity);
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
@@ -47,7 +62,15 @@ abstract class AbstractGenerateCommand extends GenerateDoctrineCommand
         $generator = $this->getGenerator($bundle);
 
         // Generate
-        $registration = $generator->generate($bundle, $entity, $metadata[0], $extended, $forceOverwrite);
+        $registration = $generator->generate(
+            $bundle,
+            $entity,
+            $metadata[0],
+            $serviceFormat,
+            $routeFormat,
+            $extended,
+            $forceOverwrite
+        );
 
         $output->writeln(sprintf(
             '%s' . PHP_EOL . PHP_EOL .

@@ -15,6 +15,8 @@ class SuluJSGenerator extends AbstractSuluGenerator
         BundleInterface $bundle,
         $entity,
         ClassMetadataInfo $metadata,
+        $serviceFormat = 'yml',
+        $routeFormat = 'yml',
         $extended = false,
         $forceOverwrite = false
     ) {

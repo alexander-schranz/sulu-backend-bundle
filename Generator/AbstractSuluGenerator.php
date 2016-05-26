@@ -43,6 +43,8 @@ abstract class AbstractSuluGenerator extends Generator
      * @param BundleInterface $bundle
      * @param $entity
      * @param ClassMetadataInfo $metadata
+     * @param string $serviceFormat
+     * @param string $routeFormat
      * @param bool $extended
      * @param bool $forceOverwrite
      *
@@ -54,6 +56,8 @@ abstract class AbstractSuluGenerator extends Generator
         BundleInterface $bundle,
         $entity,
         ClassMetadataInfo $metadata,
+        $serviceFormat = 'yml',
+        $routeFormat = 'yml',
         $extended = false,
         $forceOverwrite = false
     );

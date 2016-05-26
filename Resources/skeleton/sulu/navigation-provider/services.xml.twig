@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+{% set class = 'L91\\Sulu\\Bundle\\BackendBundle\\Admin\\BackendNavigationProvider' %}
+{% if extended %}
+    {%- set class = namespace ~ '\\Admin\\' ~ entity_class ~ 'NavigationProvider' %}
+{% endif %}
+    <services>
+        <service id="{{ bundle_prefix }}.navigation_provider.{{ entity|snake_case }}"
+                 class="{{ class }}">
+{% if not extended %}
+            <argument type="collection">
+                <argument key="{{ entity|snake_case }}" type="collection">
+                    <argument key="title">{{ bundle_prefix|replace('_', '.') }}.navigation.details</argument>
+                    <argument key="action">general</argument>
+                    <argument key="component">{{ entity_pluralize|camelize }}@{{ js_bundle_name }}</argument>
+                    <argument key="componentOptions" type="collection">
+                        <argument key="display">form</argument>
+                        <argument key="content">general</argument>
+                    </argument>
+                </argument>
+            </argument>
+
+{% endif %}
+            <tag name="sulu_admin.content_navigation" alias="{{ bundle_prefix }}_{{ entity|snake_case }}" />
+            <tag name="sulu.context" context="admin" />
+        </service>
+    </services>
+</container>
