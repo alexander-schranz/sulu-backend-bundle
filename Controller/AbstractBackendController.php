@@ -11,10 +11,7 @@ use Sulu\Component\Security\SecuredControllerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class AbstractBackendController
-    extends FOSRestController
-    implements SecuredControllerInterface,
-    ManagerControllerInterface
+abstract class AbstractBackendController extends FOSRestController implements SecuredControllerInterface, ManagerControllerInterface
 {
     /**
      * @param Request $request
@@ -54,7 +51,7 @@ abstract class AbstractBackendController
         // flatted entities
         if ($request->get('flat') === 'true') {
             /** @var RestHelperInterface $restHelper */
-            $restHelper = $this->get('sulu_core.doctrine_rest_helper');;
+            $restHelper = $this->get('sulu_core.doctrine_rest_helper');
 
             /** @var DoctrineListBuilderFactory $factory */
             $factory = $this->get('sulu_core.doctrine_list_builder_factory');
@@ -199,8 +196,8 @@ abstract class AbstractBackendController
         unset($filters['flat']);
 
         $filters['fields'] = $listRestHelper->getFields();
-        $filters['limit'] = (int)$listRestHelper->getLimit();
-        $filters['offset'] = (int)$listRestHelper->getOffset();
+        $filters['limit'] = (int) $listRestHelper->getLimit();
+        $filters['offset'] = (int) $listRestHelper->getOffset();
         $filters['sortColumn'] = $listRestHelper->getSortColumn();
         $filters['sortOrder'] = $listRestHelper->getSortOrder();
         $filters['searchFields'] = $listRestHelper->getSearchFields();
@@ -221,6 +218,7 @@ abstract class AbstractBackendController
 
     /**
      * @param array $filters
+     *
      * @return array
      */
     protected function getCountFilters($filters)

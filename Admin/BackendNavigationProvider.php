@@ -24,7 +24,7 @@ class BackendNavigationProvider implements ContentNavigationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getNavigationItems(array $options = array())
+    public function getNavigationItems(array $options = [])
     {
         /** @var ContentNavigationItem[] $navigationItems */
         $navigationItems = [];

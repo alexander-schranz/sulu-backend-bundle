@@ -15,7 +15,7 @@ class GenerateNavigationProviderCommand extends AbstractGenerateCommand
     {
         $this
             ->setName('l91:sulu:backend:generate:navigation-provider')
-            ->setDescription( 'Will create a navigation provider for a specific entity.')
+            ->setDescription('Will create a navigation provider for a specific entity.')
             ->addArgument('entity', InputArgument::REQUIRED, 'Enter your entity e.g.: AcmeBlogBundle:Post')
             ->addOption('extended', 'ex', InputOption::VALUE_NONE, 'Generate extended classes')
             ->addArgument('service-format', 'sf', InputArgument::REQUIRED, 'Set the format of service registrations.')

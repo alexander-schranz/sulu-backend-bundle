@@ -51,7 +51,7 @@ class BackendAdmin extends Admin
         // add child navigation
         $counter = 0;
         foreach ($children as $child) {
-            $counter++;
+            ++$counter;
             if ($this->securityChecker->hasPermission($child['permission'], 'view')) {
                 $childItem = new NavigationItem($child['title']);
                 $childItem->setPosition($counter);
@@ -86,7 +86,7 @@ class BackendAdmin extends Admin
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSecurityContexts()
     {
