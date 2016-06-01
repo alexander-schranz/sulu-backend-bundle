@@ -24,7 +24,7 @@ abstract class AbstractSuluGenerator extends Generator
     public function __construct(
         Filesystem $filesystem
     ) {
-        $this->filesystem  = $filesystem;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -102,7 +102,7 @@ abstract class AbstractSuluGenerator extends Generator
         $entityClass = array_pop($parts);
         $entityNamespace = implode('\\', $parts);
 
-        return array(
+        return [
             'bundle' => $bundle->getName(),
             'bundle_prefix' => self::getBundlePrefix($bundle),
             'bundle_namespace' => self::getBundleNamespace($bundle),
@@ -115,7 +115,7 @@ abstract class AbstractSuluGenerator extends Generator
             'namespace' => $bundle->getNamespace(),
             'entity_namespace' => $entityNamespace,
             'public_translations' => self::getPublicTranslations(),
-        );
+        ];
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class AbstractSuluGenerator extends Generator
     {
         return [
             'id', 'title', 'description', 'name', 'key', 'email', 'phone', 'changed', 'created', 'published', 'fax',
-            'note', 'all', 'disabled', 'public', 'visible', 'number', 'status'
+            'note', 'all', 'disabled', 'public', 'visible', 'number', 'status',
         ];
     }
 }

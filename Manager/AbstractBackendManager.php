@@ -43,7 +43,7 @@ abstract class AbstractBackendManager implements ManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll($locale = null, $filters)
+    public function findAll($locale, $filters)
     {
         return $this->repository->findAll($locale, $filters);
     }
@@ -51,7 +51,7 @@ abstract class AbstractBackendManager implements ManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function count($locale = null, $filters)
+    public function count($locale, $filters)
     {
         return $this->repository->count($locale, $filters);
     }
@@ -64,7 +64,7 @@ abstract class AbstractBackendManager implements ManagerInterface
         $object = $this->findById($id, $locale);
 
         if (!$object) {
-            return null;
+            return;
         }
 
         $this->entityManager->remove($object);

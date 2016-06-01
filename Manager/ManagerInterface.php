@@ -18,15 +18,15 @@ interface ManagerInterface
      *
      * @return array
      */
-    public function findAll($locale = null, $filters);
+    public function findAll($locale, $filters);
 
     /**
      * @param null $locale
      * @param $filters
      *
-     * @return integer
+     * @return int
      */
-    public function count($locale = null, $filters);
+    public function count($locale, $filters);
 
     /**
      * @param array $data
