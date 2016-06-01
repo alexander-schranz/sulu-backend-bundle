@@ -34,14 +34,14 @@ abstract class AbstractGenerateCommand extends GenerateDoctrineCommand
         $entity = $input->getArgument('entity');
 
         // get service format
-        $serviceFormat = $input->getArgument('service-format');
+        $serviceFormat = $input->getOption('service-format');
 
         if (!$serviceFormat) {
             $serviceFormat = 'yml';
         }
 
         // get route format
-        $routeFormat = $input->getArgument('route-format');
+        $routeFormat = $input->getOption('route-format');
 
         if (!$routeFormat) {
             $routeFormat = 'yml';

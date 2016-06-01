@@ -18,8 +18,8 @@ class GenerateManagerCommand extends AbstractGenerateCommand
             ->setDescription('Will create a manager for a specific entity.')
             ->addArgument('entity', InputArgument::REQUIRED, 'Enter your entity e.g.: AcmeBlogBundle:Post')
             ->addOption('extended', 'ex', InputOption::VALUE_NONE, 'Generate extended classes')
-            ->addArgument('service-format', 'sf', InputArgument::REQUIRED, 'Set the format of service registrations.')
-            ->addArgument('route-format', 'rf', InputArgument::REQUIRED, 'Set the format of route registrations.')
+            ->addOption('service-format', 'sf', InputOption::VALUE_REQUIRED, 'Set the format of service registrations.')
+            ->addOption('route-format', 'rf', InputOption::VALUE_REQUIRED, 'Set the format of route registrations.')
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force Overwrite');
     }
 
