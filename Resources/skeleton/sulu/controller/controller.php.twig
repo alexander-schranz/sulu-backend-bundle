@@ -140,6 +140,35 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% if extended %}
 
+{% block cgetFieldsAction %}
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function cgetFieldsAction(Request $request)
+    {
+        $fieldDescriptors = $this->getFieldDescriptors(
+            $this->getLocale($request),
+            $this->getFilters($request)
+        );
+
+        return $this->handleView($this->view($fieldDescriptors));
+    }
+
+{% endblock %}
+{% block cgetTemplateAction %}
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function cgetTemplateAction(Request $request)
+    {
+        return $this->render($this->getBundleName() . ':' . $this->getListName() . ':template.html.twig');
+    }
+
+{% endblock %}
 {% block cgetAction %}
     /**
      * @param Request $request
@@ -276,35 +305,6 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         }
 
         return $this->handleView($this->view($entity));
-    }
-
-{% endblock %}
-{% block cgetFieldsAction %}
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function cgetFieldsAction(Request $request)
-    {
-        $fieldDescriptors = $this->getFieldDescriptors(
-            $this->getLocale($request),
-            $this->getFilters($request)
-        );
-
-        return $this->handleView($this->view($fieldDescriptors));
-    }
-
-{% endblock %}
-{% block cgetTemplateAction %}
-    /**
-    * @param Request $request
-    *
-    * @return Response
-    */
-    public function cgetTemplateAction(Request $request)
-    {
-        return $this->render($this->getBundleName() . $this->getListName() . ':template.html.twig');
     }
 
 {% endblock %}
