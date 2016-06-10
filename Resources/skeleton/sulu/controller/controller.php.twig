@@ -221,7 +221,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         // create list representation
         $representation = new ListRepresentation(
             $list,
-            'entities',
+            $this->getListName(),
             $request->get('_route'),
             $request->query->all(),
             $page,
