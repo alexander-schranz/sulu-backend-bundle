@@ -33,10 +33,7 @@ use Sulu\Component\Rest\ListBuilder\Doctrine\FieldDescriptor\DoctrineFieldDescri
 {% endblock %}
 {% block class_definition %}
 {% if extended %}
-class {{ entity_class }}Controller
-    extends FOSRestController
-    implements ClassResourceInterface,
-    SecuredControllerInterface
+class {{ entity_class }}Controller extends FOSRestController implements ClassResourceInterface, SecuredControllerInterface
 {% else %}
 class {{ entity_class }}Controller extends AbstractBackendController implements ClassResourceInterface
 {% endif %}
@@ -154,7 +151,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         // flatted entities
         if ($request->get('flat') === 'true') {
             /** @var RestHelperInterface $restHelper */
-            $restHelper = $this->get('sulu_core.doctrine_rest_helper');;
+            $restHelper = $this->get('sulu_core.doctrine_rest_helper');
 
             /** @var DoctrineListBuilderFactory $factory */
             $factory = $this->get('sulu_core.doctrine_list_builder_factory');
@@ -339,8 +336,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         unset($filters['flat']);
 
         $filters['fields'] = $listRestHelper->getFields();
-        $filters['limit'] = (int)$listRestHelper->getLimit();
-        $filters['offset'] = (int)$listRestHelper->getOffset();
+        $filters['limit'] = (int) $listRestHelper->getLimit();
+        $filters['offset'] = (int) $listRestHelper->getOffset();
         $filters['sortColumn'] = $listRestHelper->getSortColumn();
         $filters['sortOrder'] = $listRestHelper->getSortOrder();
         $filters['searchFields'] = $listRestHelper->getSearchFields();
