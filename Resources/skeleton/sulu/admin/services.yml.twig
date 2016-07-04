@@ -18,7 +18,7 @@ services:
                 action: {{ bundle_namespace }}/{{ entity_pluralize|snake_case }} # menu routing action
             - Sulu: # securityContexts
                 {{ entity }}:
-                    - {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}
+                    - sulu.{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}
 {% endif %}
         tags:
             - { name: sulu.admin }

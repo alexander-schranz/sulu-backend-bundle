@@ -84,7 +84,7 @@ class {{ entity_class }}Admin extends Admin
         return [
             'Sulu' => [
                 '{{ entity }}' => [
-                    '{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}',
+                    'sulu.{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}',
                 ],
             ],
         ];
