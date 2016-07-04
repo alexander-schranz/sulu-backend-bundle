@@ -5,7 +5,8 @@
 
 require.config({
     paths: {
-        {{ js_bundle_name }}: '../../{{ js_bundle_name }}/js'
+        {{ js_bundle_name }}: '../../{{ js_bundle_name }}/js',
+        'services/app/{{ entity|snake_case('-') }}-manager': '../../app/js/services/{{ entity|snake_case('-') }}-manager'
     }
 });
 

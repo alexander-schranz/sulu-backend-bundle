@@ -1,0 +1,86 @@
+define(['underscore', 'jquery', 'text!./form.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-manager'], function(_, $, form, manager) {
+
+    var constants = {
+        formSelector: '#{{ entity|snake_case('-') }}-form'
+    };
+
+    return {
+
+        defaults: {
+            templates: {
+                form: form
+            },
+            translations: {
+{% for field in metadata.fieldNames %}
+    {% if  metadata.singleIdentifierFieldName != field %}
+    {% set translatePrefix = field in public_translations ? 'public' : bundle_prefix %}
+                {{ field|snake_case }}: '{{ translatePrefix }}.{{ field|snake_case }}'{% if not loop.last %},{% endif %}
+    {% endif %}
+{% endfor %}
+            }
+        },
+
+        layout: {
+            content: {
+                width: 'fixed',
+                leftSpace: true,
+                rightSpace: true
+            }
+        },
+
+        initialize: function() {
+            this.render();
+            this.bindCustomEvents();
+        },
+
+        render: function() {
+            this.$el.html(this.templates.form({translations: this.translations}));
+
+            this.form = this.sandbox.form.create(constants.formSelector);
+            this.form.initialized.then(function() {
+                this.sandbox.form.setData(constants.formSelector, this.data || {}).then(function() {
+                    this.sandbox.start(constants.formSelector);
+                    this.bindDomEvents();
+                    this.sandbox.dom.find('input[autofocus]').first().focus();
+                }.bind(this));
+            }.bind(this));
+        },
+
+        bindDomEvents: function() {
+            this.sandbox.dom.on(constants.formSelector, 'keyup', this.setTabDirty.bind(this), 'input, textarea');
+            this.sandbox.dom.on(constants.formSelector, 'change', this.setTabDirty.bind(this), 'input[type="checkbox"], select');
+            this.sandbox.on('husky.ckeditor.changed', this.setTabDirty.bind(this));
+            this.sandbox.on('sulu.content.changed', this.setTabDirty.bind(this));
+        },
+
+        setTabDirty: function() {
+            this.sandbox.emit('sulu.tab.dirty');
+        },
+
+        bindCustomEvents: function() {
+            this.sandbox.on('sulu.tab.save', this.save.bind(this));
+        },
+
+        save: function() {
+            if (!this.sandbox.form.validate(constants.formSelector)) {
+                this.setTabDirty();
+
+                return;
+            }
+
+            var data = this.sandbox.form.getData(constants.formSelector);
+
+            manager.save(data, this.options.id).then(function(response) {
+                this.sandbox.emit('sulu.tab.saved', response);
+            }.bind(this));
+        },
+
+        loadComponentData: function() {
+            var promise = $.Deferred();
+
+            promise.resolve(this.options.data());
+
+            return promise;
+        }
+    };
+});

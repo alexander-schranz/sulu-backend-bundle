@@ -1,0 +1,41 @@
+<form id="{{ entity|snake_case('-') }}-form">
+    <div class="grid">
+        {% for field in metadata.fieldNames if metadata.singleIdentifierFieldName != field %}
+            <div class="grid-row m-bottom-40">
+                <div class="grid-col-12">
+                    <div class="form-group">
+                        <label for="{{ field|snake_case('-') }}"><%= translations.{{ field|snake_case }} %></label>
+
+                        {% if metadata.typeOfField(field) in ['text'] %}
+                            <textarea id="{{ field|snake_case('-') }}" class="form-element hidden husky-validate"
+                                      data-type="textEditor"
+                                      data-aura-component="ckeditor@husky"
+                                      data-type-instance-name="{{ field|snake_case('-') }}"
+                                      data-form="true"
+                                    {% if not metadata.fieldMappings[field]['nullable']|default(false) %}
+                                        data-validation-required="true"
+                                    {% endif %}
+                                      data-mapper-property="{{ field|snake_case('-') }}"></textarea>
+                        {% else %}
+                            <div id="{{ field|snake_case('-') }}-element" class="form-element husky-validate"
+                                 data-type="husky-input"
+                                 data-aura-component="input@husky"
+                                 data-aura-instance-name="{{ field }}"
+                                 data-form="true"
+                                    {% if not metadata.fieldMappings[field]['nullable']|default(false) %}
+                                        data-validation-required="true"
+                                    {% endif %}
+                                    {% if metadata.typeOfField(field) in ['date', 'datetime'] %}
+                                        data-aura-skin="date"
+                                    {% endif %}
+                                    {% if loop.index0 == 0 %}
+                                        autofocus
+                                    {% endif %}
+                                 data-mapper-property="{{ field }}" />
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</form>

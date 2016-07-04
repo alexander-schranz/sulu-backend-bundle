@@ -1,0 +1,34 @@
+define(['jquery', 'underscore'], function($, _) {
+
+    var constants = {
+        endPointUrl: '/admin/api/{{ entity_pluralize|snake_case('-') }}'
+    };
+
+    function getUrl(id) {
+        var url = constants.endPointUrl;
+
+        if (id) {
+            url += '/' + id;
+        }
+
+        return url;
+    }
+
+    return {
+        getBaseUrl: function() {
+            return constants.endPointUrl;
+        },
+
+        load: function(id) {
+            return app.sandbox.util.load(_.template(getUrl(id), {id: id}));
+        },
+
+        save: function(data, id) {
+            return app.sandbox.util.save(getUrl(id), !id ? 'POST' : 'PUT', data);
+        },
+
+        remove: function(id) {
+            return app.sandbox.util.save(getUrl(id), 'DELETE');
+        }
+    };
+});

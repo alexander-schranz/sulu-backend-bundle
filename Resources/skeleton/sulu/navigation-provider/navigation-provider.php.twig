@@ -27,13 +27,9 @@ class {{ entity_class }}NavigationProvider implements ContentNavigationProviderI
     {
         $navigationItems = [];
 
-        $navigationItems['detail'] = new ContentNavigationItem('{{ bundle_prefix|replace('_', '.') }}.navigation.details');
-        $navigationItems['detail']->setAction('general');
-        $navigationItems['detail']->setComponent('{{ entity_pluralize|camelize }}@{{ js_bundle_name }}');
-        $navigationItems['detail']->setComponentOptions([
-            'display' => 'form',
-            'content' => 'general',
-        ]);
+        $navigationItems['general'] = new ContentNavigationItem('content-navigation.webspace.general');
+        $navigationItems['general']->setAction('general');
+        $navigationItems['general']->setComponent('{{ entity_pluralize|camelize }}/edit/general@{{ js_bundle_name }}');
 
         return $navigationItems;
     }

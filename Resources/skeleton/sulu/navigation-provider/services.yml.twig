@@ -10,10 +10,7 @@ services:
             - {{ entity|snake_case }}:
                 title: {{ bundle_prefix|replace('_', '.') }}.navigation.details # tab title
                 action: general # tab action
-                component: {{ entity_pluralize|camelize }}@{{ js_bundle_name }} # tab component
-                componentOptions: # tab component options
-                    display: form
-                    content: general
+                component: {{ entity_pluralize|camelize }}/edit/general@{{ js_bundle_name }} # tab component
 
 {% endif %}
         tags:

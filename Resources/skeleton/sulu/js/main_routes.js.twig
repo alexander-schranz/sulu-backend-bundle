@@ -13,7 +13,7 @@
         sandbox.mvc.routes.push({
             route: '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}/:language',
             callback: function (language) {
-                return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}@{{ js_bundle_name }}" data-aura-language="' + language + '" data-aura-display="list"/>';
+                return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/list@{{ js_bundle_name }}" data-aura-language="' + language + '"/>';
             }
         });
 
@@ -22,7 +22,7 @@
         sandbox.mvc.routes.push({
             route: '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}/:language/add/:content',
             callback: function (language, content) {
-                return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/tabs@{{ js_bundle_name }}" data-aura-language="' + language + '" data-aura-content="' + content + '"/>';
+                return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/edit@{{ js_bundle_name }}" data-aura-language="' + language + '"/>';
             }
         });
 
@@ -31,6 +31,6 @@
         sandbox.mvc.routes.push({
             route: '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}/:language/edit::id/:content',
             callback: function (language, id, content) {
-                return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/tabs@{{ js_bundle_name }}" data-aura-language="' + language + '" data-aura-id="' + id + '" data-aura-content="' + content + '"/>';
+                return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/edit@{{ js_bundle_name }}" data-aura-language="' + language + '" data-aura-id="' + id + '"/>';
             }
         });
