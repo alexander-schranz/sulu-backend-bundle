@@ -14,11 +14,7 @@
                 <argument key="{{ entity|snake_case }}" type="collection">
                     <argument key="title">{{ bundle_prefix|replace('_', '.') }}.navigation.details</argument>
                     <argument key="action">general</argument>
-                    <argument key="component">{{ entity_pluralize|camelize }}@{{ js_bundle_name }}</argument>
-                    <argument key="componentOptions" type="collection">
-                        <argument key="display">form</argument>
-                        <argument key="content">general</argument>
-                    </argument>
+                    <argument key="component">{{ entity_pluralize|camelize }}/edit/general@{{ js_bundle_name }}</argument>
                 </argument>
             </argument>
 

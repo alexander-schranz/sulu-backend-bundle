@@ -1,0 +1,117 @@
+define(['jquery', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-manager'], function($, manager) {
+
+    'use strict';
+
+    var constants = {
+        tabsUrl: '/admin/content-navigations?alias={{ bundle_prefix }}_{{ entity|snake_case }}',
+        route: '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}',
+        defaultTab: 'general'
+    };
+
+    return {
+
+        defaults: {
+            translations: {
+                title: '{{ bundle_prefix }}.{{ entity_pluralize|snake_case('-') }}.title'
+            }
+        },
+
+        header: function() {
+            return {
+                title: function() {
+                    return !!this.data.name ? this.data.name : this.translations.title;
+                }.bind(this),
+
+                tabs: {
+                    url: constants.tabsUrl,
+                    options: {
+                        data: function() {
+                            return this.sandbox.util.extend(false, {}, this.data);
+                        }.bind(this)
+                    },
+                    componentOptions: {
+                        values: this.data
+                    }
+                },
+
+                toolbar: {
+                    buttons: {
+                        save: {
+                            parent: 'saveWithOptions'
+                        }
+                    }
+                }
+            };
+        },
+
+        loadComponentData: function() {
+            if (!this.options.id) {
+                return {};
+            }
+
+            return manager.load(this.options.id);
+        },
+
+        initialize: function() {
+            this.bindCustomEvents();
+        },
+
+        bindCustomEvents: function() {
+            this.sandbox.on('sulu.header.back', this.toList.bind(this));
+            this.sandbox.on('sulu.tab.dirty', this.enableSave.bind(this));
+            this.sandbox.on('sulu.toolbar.save', this.save.bind(this));
+            this.sandbox.on('sulu.tab.data-changed', this.setData.bind(this));
+        },
+
+        toList: function() {
+            this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language);
+        },
+
+        save: function(action) {
+            this.loadingSave();
+
+            this.saveTab().then(function(data) {
+                this.afterSave(action, data);
+            }.bind(this));
+        },
+
+        setData: function(data) {
+            this.data = data;
+        },
+
+        saveTab: function() {
+            var promise = $.Deferred();
+
+            this.sandbox.once('sulu.tab.saved', function(savedData) {
+                this.setData(savedData);
+
+                promise.resolve(savedData);
+            }.bind(this));
+
+            this.sandbox.emit('sulu.tab.save');
+
+            return promise;
+        },
+
+        enableSave: function() {
+            this.sandbox.emit('sulu.header.toolbar.item.enable', 'save', false);
+        },
+
+        loadingSave: function() {
+            this.sandbox.emit('sulu.header.toolbar.item.loading', 'save');
+        },
+
+        afterSave: function(action, data) {
+            this.sandbox.emit('sulu.header.toolbar.item.disable', 'save', true);
+            this.sandbox.emit('sulu.header.saved', data);
+
+            if (action === 'back') {
+                this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language);
+            } else if (action === 'new') {
+                this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language + '/add/' + constants.defaultTab);
+            } else if (!this.options.id) {
+                this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language + '/edit:' + data.id + '/' + constants.defaultTab);
+            }
+        }
+    };
+});

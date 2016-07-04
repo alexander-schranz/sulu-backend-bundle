@@ -2,7 +2,6 @@
 
 namespace L91\Sulu\Bundle\BackendBundle\Generator;
 
-use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
@@ -30,19 +29,6 @@ class SuluControllerGenerator extends AbstractSuluGenerator
         }
 
         $this->renderFile('sulu/controller/controller.php.twig', $controllerTarget, $parameters);
-
-        // template
-        $templateTarget = sprintf(
-            '%s/Resources/views/%s/template.html.twig',
-            $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
-        );
-
-        if (!$forceOverwrite && file_exists($templateTarget)) {
-            throw new \RuntimeException('Unable to generate the template as it already exists.');
-        }
-
-        $this->renderFile('sulu/controller/template.html.twig.twig', $templateTarget, $parameters);
 
         return $this->render('sulu/controller/routing_api.' . $routeFormat . '.twig', $parameters);
     }

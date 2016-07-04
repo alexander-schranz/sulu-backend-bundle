@@ -49,46 +49,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
 
         $this->renderFile('sulu/js/main.js.twig', $mainTarget, $parameters);
 
-        // collection
-        $collectionTarget = sprintf(
-            '%s/Resources/public/js/collections/%s.js',
-            $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
-        );
-
-        if (!$forceOverwrite && file_exists($collectionTarget)) {
-            throw new \RuntimeException('Unable to generate the collection js as it already exists.');
-        }
-
-        $this->renderFile('sulu/js/collection.js.twig', $collectionTarget, $parameters);
-
-        // model
-        $modelTarget = sprintf(
-            '%s/Resources/public/js/model/%s.js',
-            $bundle->getPath(),
-            strtolower($entity)
-        );
-
-        if (!$forceOverwrite && file_exists($modelTarget)) {
-            throw new \RuntimeException('Unable to generate the model js as it already exists.');
-        }
-
-        $this->renderFile('sulu/js/model.js.twig', $modelTarget, $parameters);
-
-        // component
-        $componentTarget = sprintf(
-            '%s/Resources/public/js/components/%s/main.js',
-            $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
-        );
-
-        if (!$forceOverwrite && file_exists($componentTarget)) {
-            throw new \RuntimeException('Unable to generate the component js as it already exists.');
-        }
-
-        $this->renderFile('sulu/js/component.js.twig', $componentTarget, $parameters);
-
-        // list
+        // list.js
         $listTarget = sprintf(
             '%s/Resources/public/js/components/%s/list/main.js',
             $bundle->getPath(),
@@ -101,31 +62,70 @@ class SuluJSGenerator extends AbstractSuluGenerator
 
         $this->renderFile('sulu/js/list.js.twig', $listTarget, $parameters);
 
-        // tabs
-        $tabsTarget = sprintf(
-            '%s/Resources/public/js/components/%s/tabs/main.js',
+        // list.html
+        $listTarget = sprintf(
+            '%s/Resources/public/js/components/%s/list/list.html',
             $bundle->getPath(),
             strtolower(Inflector::pluralize($entity))
         );
 
-        if (!$forceOverwrite && file_exists($tabsTarget)) {
-            throw new \RuntimeException('Unable to generate the tabs js as it already exists.');
+        if (!$forceOverwrite && file_exists($listTarget)) {
+            throw new \RuntimeException('Unable to generate the list html as it already exists.');
         }
 
-        $this->renderFile('sulu/js/tabs.js.twig', $tabsTarget, $parameters);
+        $this->renderFile('sulu/js/list.html.twig', $listTarget, $parameters);
 
-        // form
-        $formTarget = sprintf(
-            '%s/Resources/public/js/components/%s/form/main.js',
+        // edit.js
+        $listTarget = sprintf(
+            '%s/Resources/public/js/components/%s/edit/main.js',
             $bundle->getPath(),
             strtolower(Inflector::pluralize($entity))
         );
 
-        if (!$forceOverwrite && file_exists($formTarget)) {
-            throw new \RuntimeException('Unable to generate the form js as it already exists.');
+        if (!$forceOverwrite && file_exists($listTarget)) {
+            throw new \RuntimeException('Unable to generate the edit js as it already exists.');
         }
 
-        $this->renderFile('sulu/js/form.js.twig', $formTarget, $parameters);
+        $this->renderFile('sulu/js/edit.js.twig', $listTarget, $parameters);
+
+        // general.js
+        $listTarget = sprintf(
+            '%s/Resources/public/js/components/%s/edit/general/main.js',
+            $bundle->getPath(),
+            strtolower(Inflector::pluralize($entity))
+        );
+
+        if (!$forceOverwrite && file_exists($listTarget)) {
+            throw new \RuntimeException('Unable to generate the general js as it already exists.');
+        }
+
+        $this->renderFile('sulu/js/general.js.twig', $listTarget, $parameters);
+
+        // general.html
+        $listTarget = sprintf(
+            '%s/Resources/public/js/components/%s/edit/general/form.html',
+            $bundle->getPath(),
+            strtolower(Inflector::pluralize($entity))
+        );
+
+        if (!$forceOverwrite && file_exists($listTarget)) {
+            throw new \RuntimeException('Unable to generate the general html as it already exists.');
+        }
+
+        $this->renderFile('sulu/js/general.html.twig', $listTarget, $parameters);
+
+        // manager.js
+        $listTarget = sprintf(
+            '%s/Resources/public/js/services/%s-manager.js',
+            $bundle->getPath(),
+            strtolower($entity)
+        );
+
+        if (!$forceOverwrite && file_exists($listTarget)) {
+            throw new \RuntimeException('Unable to generate the manager js as it already exists.');
+        }
+
+        $this->renderFile('sulu/js/manager.js.twig', $listTarget, $parameters);
 
         // build
         exec(sprintf('cd %s && npm install && grunt build', $bundle->getPath()));

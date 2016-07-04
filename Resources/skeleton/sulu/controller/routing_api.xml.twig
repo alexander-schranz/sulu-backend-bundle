@@ -6,6 +6,5 @@
     <import id="{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}"
             type="rest"
             resource="{{ namespace }}\Controller{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}Controller"
-            prefix="{{ bundle_namespace }}"
             name-prefix="{{ bundle_prefix }}." />
 </routes>

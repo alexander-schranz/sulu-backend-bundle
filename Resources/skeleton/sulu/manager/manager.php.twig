@@ -39,7 +39,7 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
     /**
      * @var {{ entity }}Repository
      */
-    protected $repository;
+    protected ${{ entity|camelize }}Repository;
 {% endblock %}
 
 {% block constructor %}
@@ -64,7 +64,7 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
      */
     public function findById($id, $locale = null)
     {
-        return $this->repository->findById($id, $locale);
+        return $this->{{ entity|camelize }}Repository->findById($id, $locale);
     }
 {% endblock %}
 
@@ -74,7 +74,7 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
      */
     public function findAll($locale = null, $filters = [])
     {
-        return $this->repository->findAll($locale, $filters);
+        return $this->{{ entity|camelize }}Repository->findAll($locale, $filters);
     }
 {% endblock %}
 
@@ -84,7 +84,7 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
      */
     public function count($locale = null, $filters = [])
     {
-        return $this->repository->count($locale, $filters);
+        return $this->{{ entity|camelize }}Repository->count($locale, $filters);
     }
 {% endblock %}
 
@@ -124,13 +124,6 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
 
 {% endfor %}
         $this->entityManager->persist(${{ entity|camelize }});
-        $this->entityManager->flush();
-
-        if (!$id) {
-            // to avoid lazy load of sub entities in the serializer reload whole object with sub entities from db
-            // remove this when you don`t join anything in `findById`
-            ${{ entity|camelize }} = $this->findById(${{ entity|camelize }}->get{{ metadata.singleIdentifierFieldName|capitalize }}(), $locale);
-        }
 
         return ${{ entity|camelize }};
     }
@@ -150,7 +143,6 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
         }
 
         $this->entityManager->remove($object);
-        $this->entityManager->flush();
 
         return $object;
     }

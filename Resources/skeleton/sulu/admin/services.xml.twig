@@ -17,7 +17,7 @@
                 <argument>{{ js_bundle_name }}</argument>
                 <argument type="collection">
                     <argument key="{{ entity_pluralize|snake_case }}" type="collection">
-                        <argument key="permission">{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}</argument>
+                        <argument key="permission">sulu.{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}</argument>
                         <argument key="title">{{ bundle_prefix }}.{{ entity_pluralize|snake_case }}</argument>
                         <argument key="action">{{ bundle_namespace }}/{{ entity_pluralize|snake_case }}</argument>
                     </argument>

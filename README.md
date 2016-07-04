@@ -57,7 +57,7 @@ class VehicleRepository extends BackendRepository
 services:
     your.repository.vehicle:
         class: YourBundle\Entity\VehicleRepository
-        factory_service: doctrine.orm.default_entity_manager
+        factory_service: doctrine.orm.entity_manager
         factory_method: getRepository
         arguments:
             - YourBundle\Entity\Vehicle
