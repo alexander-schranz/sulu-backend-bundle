@@ -49,10 +49,8 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
      * @param EntityManagerInterface $entityManager
      * @param {{ entity }}Repository ${{ entity|camelize }}Repository
      */
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        {{ entity }}Repository ${{ entity|camelize }}Repository
-    ) {
+    public function __construct(EntityManagerInterface $entityManager, {{ entity }}Repository ${{ entity|camelize }}Repository)
+    {
         $this->entityManager = $entityManager;
         $this->{{ entity|camelize }}Repository = ${{ entity|camelize }}Repository;
     }
@@ -150,9 +148,11 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
 
 {% block get_value %}
     /**
-     * @param $data
-     * @param $value
-     * @param null $default
+     * Return a property from an array.
+     *
+     * @param array $data
+     * @param string $value
+     * @param mixed $default
      * @param string $type
      *
      * @return mixed

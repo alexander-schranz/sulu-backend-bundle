@@ -4,7 +4,10 @@
             <div class="grid-row m-bottom-40">
                 <div class="grid-col-12">
                     <div class="form-group">
-                        <label for="{{ field|snake_case('-') }}"><%= translations.{{ field|snake_case }} %></label>
+                        <label for="{{ field|snake_case('-') }}" {% spaceless %}
+                            {% if not metadata.fieldMappings[field]['nullable']|default(false) %}
+                                class="required"
+                            {% endif %}{% endspaceless %}><%= translations.{{ field|snake_case }} %</label>
 
                         {% if metadata.typeOfField(field) in ['text'] %}
                             <textarea id="{{ field|snake_case('-') }}" class="form-element hidden husky-validate"

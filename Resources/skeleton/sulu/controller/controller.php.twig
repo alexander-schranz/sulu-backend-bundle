@@ -14,6 +14,7 @@ use Sulu\Component\Rest\ListBuilder\Doctrine\DoctrineListBuilderFactory;
 use Sulu\Component\Rest\ListBuilder\Doctrine\FieldDescriptor\DoctrineFieldDescriptor;
 use Sulu\Component\Rest\ListBuilder\ListRepresentation;
 use Sulu\Component\Rest\ListBuilder\ListRestHelper;
+use Sulu\Component\Rest\RequestParametersTrait;
 use Sulu\Component\Rest\RestHelperInterface;
 use Sulu\Component\Security\SecuredControllerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,9 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endif %}
 {% endblock %}
 {
+{% if extended %}
+    use RequestParametersTrait;
+{% endif %}
 {% block getSecurityContext %}
     /**
      * {@inheritdoc}
@@ -52,6 +56,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% block getManager %}
     /**
 {% if extended %}
+     * Return the manager for the entity.
+     *
      * @return {{ entity }}Manager
 {% else %}
      * {@inheritdoc}
@@ -65,6 +71,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getFieldDescriptors %}
     /**
+     * Return the field descriptors.
+     *
      * @param string $locale
      * @param array $filters
      *
@@ -108,6 +116,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getModelClass %}
     /**
+     * Return the entity model class.
+     *
      * @return string
      */
     public function getModelClass()
@@ -118,27 +128,21 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getListName %}
     /**
+     * Return the entity list name.
+     *
      * @return string
      */
     public function getListName()
     {
         return '{{ entity_pluralize|snake_case }}';
     }
-
-{% endblock %}
-{% block getBundleName %}
-    /**
-    * @return string
-    */
-    public function getBundleName()
-    {
-        return '{{ bundle }}';
-    }
 {% endblock %}
 {% if extended %}
 
 {% block cgetFieldsAction %}
     /**
+     * Return the entity fields.
+     *
      * @param Request $request
      *
      * @return Response
@@ -156,6 +160,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block cgetAction %}
     /**
+     * Return list of entities.
+     *
      * @param Request $request
      *
      * @return Response
@@ -166,7 +172,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         $filters = $this->getFilters($request);
 
         // flatted entities
-        if ($request->get('flat') === 'true') {
+        if ($this->getBooleanRequestParameter($request, 'flat')) {
             /** @var RestHelperInterface $restHelper */
             $restHelper = $this->get('sulu_core.doctrine_rest_helper');
 
@@ -220,6 +226,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getAction %}
     /**
+     * Return specific entity.
+     *
      * @param Request $request
      * @param $id
      *
@@ -238,6 +246,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block postAction %}
     /**
+     * Create a new entity.
+     *
      * @param Request $request
      *
      * @return Response
@@ -256,6 +266,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block putAction %}
     /**
+     * Edit a specific entity.
+     *
      * @param Request $request
      * @param $id
      *
@@ -275,6 +287,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block deleteAction %}
     /**
+     * Remove a specific entity.
+     *
      * @param Request $request
      * @param $id
      *
@@ -289,7 +303,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         $this->flushEntities();
 
         if (!$entity) {
-            return new Response('', 204);
+            return new Response(null);
         }
 
         return $this->handleView($this->view($entity));
@@ -308,6 +322,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getFilters %}
     /**
+     * Get the request filters for entity list.
+     *
      * @param Request $request
      *
      * @return array
@@ -319,10 +335,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
         $listRestHelper = new ListRestHelper($request);
 
         unset($filters['page']);
-        unset($filters['limit']);
-        unset($filters['fields']);
         unset($filters['search']);
-        unset($filters['searchFields']);
         unset($filters['locale']);
         unset($filters['flat']);
 
@@ -340,6 +353,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getData %}
     /**
+     * Get the request data.
+     *
      * @param Request $request
      *
      * @return array
@@ -352,6 +367,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getCountFilters %}
     /**
+     * Unset the pagination filters for total count.
+     *
      * @param array $filters
      * @return array
      */
@@ -367,6 +384,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getLimit %}
     /**
+     * Get limit.
+     *
      * @param array $filters
      *
      * @return int
@@ -383,6 +402,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getOffset %}
     /**
+     * Get offset.
+     *
      * @param array $filters
      *
      * @return int
@@ -399,6 +420,8 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
 {% endblock %}
 {% block getPage %}
     /**
+     * Get page.
+     *
      * @param array $filters
      *
      * @return int

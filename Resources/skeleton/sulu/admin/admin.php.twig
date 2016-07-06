@@ -22,10 +22,14 @@ class {{ entity_class }}Admin extends Admin
 {% endblock %}
 {
 {% block constructor %}
-    public function __construct(
-        SecurityCheckerInterface $securityChecker,
-        $title
-    ) {
+    /**
+     * {{ entity_class }}Admin constructor.
+     *
+     * @param SecurityCheckerInterface $securityChecker
+     * @param string $title
+     */
+    public function __construct(SecurityCheckerInterface $securityChecker, $title)
+    {
         // set root navigation
         $rootNavigationItem = new NavigationItem($title);
 
@@ -52,16 +56,6 @@ class {{ entity_class }}Admin extends Admin
 
         // set navigation
         $this->setNavigation(new Navigation($rootNavigationItem));
-    }
-{% endblock %}
-
-{% block get_commands %}
-    /**
-     * {@inheritdoc}
-     */
-    public function getCommands()
-    {
-        return [];
     }
 {% endblock %}
 
