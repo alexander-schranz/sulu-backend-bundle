@@ -1,18 +1,19 @@
-define(['jquery', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-manager'], function($, manager) {
+/**
+ * {% include 'sulu/comment.twig' %}
+
+ */
+
+define(['jquery', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-manager', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-router'], function($, manager, router) {
 
     'use strict';
 
-    var constants = {
-        tabsUrl: '/admin/content-navigations?alias={{ bundle_prefix }}_{{ entity|snake_case }}',
-        route: '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}',
-        defaultTab: 'general'
-    };
+    var defaultTab = 'general';
 
     return {
 
         defaults: {
             translations: {
-                title: '{{ bundle_prefix }}.{{ entity_pluralize|snake_case('-') }}.title'
+                title: '{{ bundle_prefix }}.{{ entity_pluralize|snake_case('-') }}'
             }
         },
 
@@ -23,7 +24,7 @@ define(['jquery', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-man
                 }.bind(this),
 
                 tabs: {
-                    url: constants.tabsUrl,
+                    url: '/admin/content-navigations?alias={{ bundle_prefix }}_{{ entity|snake_case }}',
                     options: {
                         data: function() {
                             return this.sandbox.util.extend(false, {}, this.data);
@@ -49,7 +50,7 @@ define(['jquery', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-man
                 return {};
             }
 
-            return manager.load(this.options.id);
+            return manager.load(this.options.id, this.options.locale);
         },
 
         initialize: function() {
@@ -64,7 +65,7 @@ define(['jquery', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-man
         },
 
         toList: function() {
-            this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language);
+            router.toList(this.options.locale);
         },
 
         save: function(action) {
@@ -106,11 +107,11 @@ define(['jquery', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-man
             this.sandbox.emit('sulu.header.saved', data);
 
             if (action === 'back') {
-                this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language);
+                router.toList(this.options.locale);
             } else if (action === 'new') {
-                this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language + '/add/' + constants.defaultTab);
+                router.toAdd(this.options.locale, defaultTab, data.parent);
             } else if (!this.options.id) {
-                this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language + '/edit:' + data.id + '/' + constants.defaultTab);
+                router.toEdit(this.options.locale, data.id, defaultTab);
             }
         }
     };

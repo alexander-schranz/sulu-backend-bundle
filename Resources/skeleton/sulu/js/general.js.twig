@@ -1,8 +1,11 @@
+/**
+ * {% include 'sulu/comment.twig' %}
+
+ */
+
 define(['underscore', 'jquery', 'text!./form.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-manager'], function(_, $, form, manager) {
 
-    var constants = {
-        formSelector: '#{{ entity|snake_case('-') }}-form'
-    };
+    var formSelector = '#{{ entity|snake_case('-') }}-form';
 
     return {
 
@@ -11,12 +14,13 @@ define(['underscore', 'jquery', 'text!./form.html', 'services/{{ bundle_prefix }
                 form: form
             },
             translations: {
-{% for field in metadata.fieldNames %}
-    {% if  metadata.singleIdentifierFieldName != field %}
-    {% set translatePrefix = field in public_translations ? 'public' : bundle_prefix %}
+{% for field in metadata.fieldNames -%}
+{% if  metadata.singleIdentifierFieldName != field %}
+{% set translatePrefix = field in public_translations ? 'public' : bundle_prefix %}
                 {{ field|snake_case }}: '{{ translatePrefix }}.{{ field|snake_case }}'{% if not loop.last %},{% endif %}
-    {% endif %}
-{% endfor %}
+
+{% endif %}
+{%- endfor %}
             }
         },
 
@@ -36,10 +40,10 @@ define(['underscore', 'jquery', 'text!./form.html', 'services/{{ bundle_prefix }
         render: function() {
             this.$el.html(this.templates.form({translations: this.translations}));
 
-            this.form = this.sandbox.form.create(constants.formSelector);
+            this.form = this.sandbox.form.create(formSelector);
             this.form.initialized.then(function() {
-                this.sandbox.form.setData(constants.formSelector, this.data || {}).then(function() {
-                    this.sandbox.start(constants.formSelector);
+                this.sandbox.form.setData(formSelector, this.data || {}).then(function() {
+                    this.sandbox.start(formSelector);
                     this.bindDomEvents();
                     this.sandbox.dom.find('input[autofocus]').first().focus();
                 }.bind(this));
@@ -47,8 +51,8 @@ define(['underscore', 'jquery', 'text!./form.html', 'services/{{ bundle_prefix }
         },
 
         bindDomEvents: function() {
-            this.sandbox.dom.on(constants.formSelector, 'keyup', this.setTabDirty.bind(this), 'input, textarea');
-            this.sandbox.dom.on(constants.formSelector, 'change', this.setTabDirty.bind(this), 'input[type="checkbox"], select');
+            this.sandbox.dom.on(formSelector, 'keyup', this.setTabDirty.bind(this), 'input, textarea');
+            this.sandbox.dom.on(formSelector, 'change', this.setTabDirty.bind(this), 'input[type="checkbox"], select');
             this.sandbox.on('husky.ckeditor.changed', this.setTabDirty.bind(this));
             this.sandbox.on('sulu.content.changed', this.setTabDirty.bind(this));
         },
@@ -62,15 +66,15 @@ define(['underscore', 'jquery', 'text!./form.html', 'services/{{ bundle_prefix }
         },
 
         save: function() {
-            if (!this.sandbox.form.validate(constants.formSelector)) {
+            if (!this.sandbox.form.validate(formSelector)) {
                 this.setTabDirty();
 
                 return;
             }
 
-            var data = this.sandbox.form.getData(constants.formSelector);
+            var data = this.sandbox.form.getData(formSelector);
 
-            manager.save(data, this.options.id).then(function(response) {
+            manager.save(data, this.options.locale, this.options.id).then(function(response) {
                 this.sandbox.emit('sulu.tab.saved', response);
             }.bind(this));
         },

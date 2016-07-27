@@ -1,0 +1,75 @@
+/**
+ * {% include 'sulu/comment.twig' %}
+
+ */
+
+define(['services/husky/mediator'], function(mediator) {
+    var baseUrl = '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}';
+
+    var urls = {
+        list: baseUrl + '/:locale',
+        add: baseUrl + '/:locale/add/:content',
+        edit: baseUrl + '/:locale/edit::id/:content'
+    };
+
+    return {
+        toList: function(locale) {
+            mediator.emit('sulu.router.navigate', urls.list.replace(':locale', locale));
+        },
+
+        toEdit: function(locale, id, tab) {
+            mediator.emit('sulu.router.navigate',
+                urls.edit
+                    .replace(':locale', locale)
+                    .replace(':id', id)
+                    .replace(':content', tab),
+                true,
+                true
+            );
+        },
+
+        toAdd: function(locale, tab) {
+            mediator.emit('sulu.router.navigate',
+                urls.add
+                    .replace(':locale', locale)
+                    .replace(':content', tab),
+                true,
+                true
+            );
+        },
+
+        initialize: function(routes, locale) {
+            // no locale redirect
+            routes.push({
+                route: baseUrl,
+                callback: function () {
+                    mediator.emit('sulu.router.navigate', baseUrl + '/' + locale);
+                }
+            });
+
+            // list all entities
+            routes.push({
+                route: urls.list,
+                callback: function (locale) {
+                    return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/list@{{ js_bundle_name }}" data-aura-locale="' + locale + '"/>';
+                }
+            });
+
+            // add entity
+            routes.push({
+                route: urls.add,
+                callback: function (locale, content) {
+                    return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/edit@{{ js_bundle_name }}" data-aura-locale="' + locale + '"/>';
+                }
+            });
+
+            // edit entity
+            routes.push({
+                route: urls.edit,
+                callback: function (locale, id, content) {
+                    return '<div data-aura-component="{{ entity_pluralize|snake_case('-') }}/edit@{{ js_bundle_name }}" data-aura-locale="' + locale + '" data-aura-id="' + id + '"/>';
+                }
+            });
+        }
+    };
+});

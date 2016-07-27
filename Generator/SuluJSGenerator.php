@@ -127,6 +127,19 @@ class SuluJSGenerator extends AbstractSuluGenerator
 
         $this->renderFile('sulu/js/manager.js.twig', $listTarget, $parameters);
 
+        // router.js
+        $listTarget = sprintf(
+            '%s/Resources/public/js/services/%s-router.js',
+            $bundle->getPath(),
+            strtolower($entity)
+        );
+
+        if (!$forceOverwrite && file_exists($listTarget)) {
+            throw new \RuntimeException('Unable to generate the router js as it already exists.');
+        }
+
+        $this->renderFile('sulu/js/router.js.twig', $listTarget, $parameters);
+
         // build
         exec(sprintf('cd %s && npm install && grunt build', $bundle->getPath()));
     }

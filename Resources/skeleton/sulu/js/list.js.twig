@@ -1,26 +1,25 @@
-define(['text!./list.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-manager'], function(list, manager) {
+/**
+ * {% include 'sulu/comment.twig' %}
 
-    var defaults = {
-        templates: {
-            list: list
-        }
-    };
+ */
 
-    var constants = {
-        name: '{{ entity_pluralize|snake_case('-') }}',
-        route: '{{ bundle_namespace }}/{{ entity_pluralize|snake_case('-') }}',
-        translatePrefix: '{{ bundle_prefix }}.{{ entity_pluralize|snake_case('-') }}.',
-        searchFields: ['title'],
-        defaultTab: 'general'
-    };
+define(['text!./list.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-manager', 'services/{{ bundle_prefix }}/{{ entity|snake_case('-') }}-router'], function(list, manager, router) {
+
+    var name = '{{ entity_pluralize|snake_case('-') }}';
+    var defaultTab = 'general';
 
     return {
 
-        defaults: defaults,
+        defaults: {
+            templates: {
+                list: list
+            }
+        },
 
         header: {
-            title: constants.translatePrefix + 'title',
+            title: '{{ bundle_prefix }}.{{ entity_pluralize|snake_case('-') }}',
             underline: false,
+            noBack: true,
 
             toolbar: {
                 buttons: {
@@ -47,11 +46,11 @@ define(['text!./list.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('
             this.$el.html(this.templates.list());
 
             this.sandbox.sulu.initListToolbarAndList.call(this,
-                    constants.name,
-                    manager.getBaseUrl() + '/fields',
+                    name,
+                    manager.getBaseUrl() + '/fields?locale=' + this.options.locale,
                     {
                         el: this.$find('#list-toolbar-container'),
-                        instanceName: constants.name,
+                        instanceName: name,
                         template: this.sandbox.sulu.buttons.get({
                             settings: {
                                 options: {
@@ -65,23 +64,23 @@ define(['text!./list.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('
                         })
                     },
                     {
-                        el: this.sandbox.dom.find('#' + constants.name +'-list'),
-                        url: manager.getBaseUrl() + '?flat=true',
-                        searchInstanceName: constants.name,
-                        searchFields: constants.searchFields,
-                        resultKey: constants.name,
-                        instanceName: constants.name,
+                        el: this.sandbox.dom.find('#' + name +'-list'),
+                        url: manager.getBaseUrl() + '?flat=true&locale=' + this.options.locale,
+                        searchInstanceName: name,
+                        searchFields: ['title'],
+                        resultKey: name,
+                        instanceName: name,
                         actionCallback: this.toEdit.bind(this)
                     }
             );
         },
 
         toEdit: function(id) {
-            this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language + '/edit:' + id + '/' + constants.defaultTab);
+            router.toEdit(this.options.locale, id, defaultTab);
         },
 
         toAdd: function() {
-            this.sandbox.emit('sulu.router.navigate', constants.route + '/' + this.options.language + '/add/' + constants.defaultTab);
+            router.toAdd(this.options.locale, defaultTab);
         },
 
         deleteItems: function(ids) {
@@ -91,8 +90,8 @@ define(['text!./list.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('
         },
 
         deleteItem: function(id) {
-            manager.remove(id).then(function() {
-                this.sandbox.emit('husky.datagrid.' + constants.name + '.record.remove', id);
+            manager.remove(id, this.options.locale).then(function() {
+                this.sandbox.emit('husky.datagrid.' + name + '.record.remove', id);
             }.bind(this));
         },
 
@@ -102,13 +101,13 @@ define(['text!./list.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('
         bindCustomEvents: function() {
             this.sandbox.on('sulu.toolbar.add', this.toAdd.bind(this));
 
-            this.sandbox.on('husky.datagrid.' + constants.name + '.number.selections', function(number) {
+            this.sandbox.on('husky.datagrid.' + name + '.number.selections', function(number) {
                 var postfix = number > 0 ? 'enable' : 'disable';
                 this.sandbox.emit('sulu.header.toolbar.item.' + postfix, 'deleteSelected', false);
             }.bind(this));
 
             this.sandbox.on('sulu.toolbar.delete', function() {
-                this.sandbox.emit('husky.datagrid.' + constants.name + '.items.get-selected', this.deleteItems.bind(this));
+                this.sandbox.emit('husky.datagrid.' + name + '.items.get-selected', this.deleteItems.bind(this));
             }.bind(this));
         }
     };

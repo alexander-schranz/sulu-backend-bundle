@@ -6,24 +6,28 @@
 require.config({
     paths: {
         {{ js_bundle_name }}: '../../{{ js_bundle_name }}/js',
-        'services/app/{{ entity|snake_case('-') }}-manager': '../../app/js/services/{{ entity|snake_case('-') }}-manager'
+        'services/{{ js_bundle_name }}/{{ entity|snake_case('-') }}-manager': '../../{{ js_bundle_name }}/js/services/{{ entity|snake_case('-') }}-manager',
+        'services/{{ js_bundle_name }}/{{ entity|snake_case('-') }}-router': '../../{{ js_bundle_name }}/js/services/{{ entity|snake_case('-') }}-router'
     }
 });
 
-define({
-    name: "{{ bundle }}",
+define(['services/{{ js_bundle_name }}/{{ entity|snake_case('-') }}-router'],
+    function ({{ entity }}Router) {
 
-    initialize: function(app) {
-        'use strict';
-        var sandbox = app.sandbox;
+        return {
+            name: "{{ bundle }}",
 
-        app.components.addSource('{{ js_bundle_name }}', '/bundles/{{ js_bundle_name }}/js/components');
+            initialize: function (app) {
+                'use strict';
 
-        function getContentLanguage() {
-            // FIXME do not use user locale as default use default language of system instead
-            return sandbox.sulu.getUserSetting('contentLanguage') || sandbox.sulu.user.locale;
-        }
+                var sandbox = app.sandbox;
+                var locale = sandbox.sulu.getUserSetting('contentLanguage') || sandbox.sulu.user.locale;
 
-{% include 'sulu/js/main_routes.js.twig' %}
+                app.components.addSource('{{ js_bundle_name }}', '/bundles/{{ js_bundle_name }}/js/components');
+
+                /** {{ entity }} */
+                {{ entity }}Router.initialize(sandbox.mvc.routes, locale);
+            }
+        };
     }
-});
+);

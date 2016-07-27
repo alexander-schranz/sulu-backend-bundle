@@ -1,34 +1,39 @@
+/**
+ * {% include 'sulu/comment.twig' %}
+
+ */
+
 define(['jquery', 'underscore'], function($, _) {
 
-    var constants = {
-        endPointUrl: '/admin/api/{{ entity_pluralize|snake_case('-') }}'
-    };
-
-    function getUrl(id) {
-        var url = constants.endPointUrl;
+    function getUrl(locale, id) {
+        var url = '/admin/api/{{ entity_pluralize|snake_case('-') }}';
 
         if (id) {
             url += '/' + id;
+        }
+
+        if (locale) {
+            url += '?locale=' + locale;
         }
 
         return url;
     }
 
     return {
-        getBaseUrl: function() {
-            return constants.endPointUrl;
+        getBaseUrl: function(locale) {
+            return getUrl(locale);
         },
 
-        load: function(id) {
-            return app.sandbox.util.load(_.template(getUrl(id), {id: id}));
+        load: function(id, locale) {
+            return app.sandbox.util.load(_.template(getUrl(locale, id), {id: id}));
         },
 
-        save: function(data, id) {
-            return app.sandbox.util.save(getUrl(id), !id ? 'POST' : 'PUT', data);
+        save: function(data, locale, id) {
+            return app.sandbox.util.save(getUrl(locale, id), !id ? 'POST' : 'PUT', data);
         },
 
-        remove: function(id) {
-            return app.sandbox.util.save(getUrl(id), 'DELETE');
+        remove: function(id, locale) {
+            return app.sandbox.util.save(getUrl(locale, id), 'DELETE');
         }
     };
 });

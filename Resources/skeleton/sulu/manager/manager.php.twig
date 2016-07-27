@@ -106,14 +106,20 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
     {% if not metadata.fieldMappings[field]['nullable']|default(false) %}
         {% if metadata.typeOfField(field) in ['date', 'datetime'] %}
             {% set default = ', new \\DateTime(), \'date\'' %}
-        {% elseif  metadata.typeOfField(field) in ['integer', 'float', 'double', 'decimal'] %}
-            {% set default = ', 0' %}
+        {% elseif  metadata.typeOfField(field) in ['integer'] %}
+            {% set default = ', 0, \'number\'' %}
+        {% elseif  metadata.typeOfField(field) in ['float', 'double', 'decimal'] %}
+            {% set default = ', 0, \'decimal\'' %}
         {% else %}
             {% set default = ', \'\'' %}
         {% endif %}
     {% else %}
         {% if metadata.typeOfField(field) in ['date', 'datetime'] %}
             {% set default = ', null, \'date\'' %}
+        {% elseif  metadata.typeOfField(field) in ['integer'] %}
+            {% set default = ', null, \'number\'' %}
+        {% elseif  metadata.typeOfField(field) in ['float', 'double', 'decimal'] %}
+            {% set default = ', null, \'decimal\'' %}
         {% endif %}
     {% endif %}
 {% endspaceless %}

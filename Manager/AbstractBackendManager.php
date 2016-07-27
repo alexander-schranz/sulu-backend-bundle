@@ -5,6 +5,7 @@ namespace L91\Sulu\Bundle\BackendBundle\Manager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use L91\Sulu\Bundle\BackendBundle\Entity\BackendRepositoryInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class AbstractBackendManager implements ManagerInterface
 {
@@ -83,18 +84,24 @@ abstract class AbstractBackendManager implements ManagerInterface
      */
     protected static function getValue($data, $value, $default = null, $type = null)
     {
-        if (isset($data[$value])) {
-            if ($type === 'date') {
-                if (!$data[$value]) {
-                    return $default;
-                }
+        $value = PropertyAccess::createPropertyAccessor()->getValue($data, '[' . $value . ']');
 
-                return new \DateTime($data[$value]);
-            }
-
-            return $data[$value];
+        if (!$value) {
+            return $default;
         }
 
-        return $default;
+        if ($type === 'date') {
+            return new \DateTime($value);
+        }
+
+        if ($type === 'number') {
+            return (int) $value;
+        }
+
+        if ($type === 'decimal') {
+            return (float) $value;
+        }
+
+        return $value;
     }
 }
