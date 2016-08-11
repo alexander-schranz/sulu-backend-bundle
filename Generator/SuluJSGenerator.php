@@ -53,7 +53,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
         $listTarget = sprintf(
             '%s/Resources/public/js/components/%s/list/main.js',
             $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
+            $this->snakeCase(Inflector::pluralize($entity), '-')
         );
 
         if (!$forceOverwrite && file_exists($listTarget)) {
@@ -66,7 +66,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
         $listTarget = sprintf(
             '%s/Resources/public/js/components/%s/list/list.html',
             $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
+            $this->snakeCase(Inflector::pluralize($entity), '-')
         );
 
         if (!$forceOverwrite && file_exists($listTarget)) {
@@ -79,7 +79,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
         $listTarget = sprintf(
             '%s/Resources/public/js/components/%s/edit/main.js',
             $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
+            $this->snakeCase(Inflector::pluralize($entity), '-')
         );
 
         if (!$forceOverwrite && file_exists($listTarget)) {
@@ -92,7 +92,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
         $listTarget = sprintf(
             '%s/Resources/public/js/components/%s/edit/general/main.js',
             $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
+            $this->snakeCase(Inflector::pluralize($entity), '-')
         );
 
         if (!$forceOverwrite && file_exists($listTarget)) {
@@ -105,7 +105,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
         $listTarget = sprintf(
             '%s/Resources/public/js/components/%s/edit/general/form.html',
             $bundle->getPath(),
-            strtolower(Inflector::pluralize($entity))
+            $this->snakeCase(Inflector::pluralize($entity), '-')
         );
 
         if (!$forceOverwrite && file_exists($listTarget)) {
@@ -118,7 +118,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
         $listTarget = sprintf(
             '%s/Resources/public/js/services/%s-manager.js',
             $bundle->getPath(),
-            strtolower($entity)
+            $this->snakeCase($entity, '-')
         );
 
         if (!$forceOverwrite && file_exists($listTarget)) {
@@ -131,7 +131,7 @@ class SuluJSGenerator extends AbstractSuluGenerator
         $listTarget = sprintf(
             '%s/Resources/public/js/services/%s-router.js',
             $bundle->getPath(),
-            strtolower($entity)
+            $this->snakeCase($entity, '-')
         );
 
         if (!$forceOverwrite && file_exists($listTarget)) {
