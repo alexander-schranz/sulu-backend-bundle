@@ -21,7 +21,7 @@ define(['services/{{ js_bundle_name }}/{{ entity|snake_case('-') }}-router'],
                 'use strict';
 
                 var sandbox = app.sandbox;
-                var locale = sandbox.sulu.getUserSetting('contentLanguage') || sandbox.sulu.user.locale;
+                var locale = sandbox.sulu.getUserSetting('contentLanguage') || sandbox.sulu.getDefaultContentLocale();
 
                 app.components.addSource('{{ js_bundle_name }}', '/bundles/{{ js_bundle_name }}/js/components');
 

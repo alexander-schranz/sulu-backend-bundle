@@ -316,7 +316,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
      */
     public function getLocale(Request $request)
     {
-        return $request->get('locale', $request->getLocale());
+        return $request->get('locale');
     }
 
 {% endblock %}
@@ -332,7 +332,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
     {
         $filters = $request->query->all();
 
-        $listRestHelper = new ListRestHelper($request);
+        $listRestHelper = $this->get('sulu_core.list_rest_helper');
 
         unset($filters['page']);
         unset($filters['search']);
