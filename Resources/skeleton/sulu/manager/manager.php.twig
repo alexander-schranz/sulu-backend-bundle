@@ -44,7 +44,7 @@ class {{ entity }}Manager{% if not extended %} extends AbstractBackendManager{% 
 
 {% block constructor %}
     /**
-     * EventManager constructor.
+     * {{ entity }}Manager constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param {{ entity }}Repository ${{ entity|camelize }}Repository

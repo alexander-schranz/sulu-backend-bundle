@@ -68,7 +68,7 @@ define(['text!./list.html', 'services/{{ bundle_prefix }}/{{ entity|snake_case('
                         url: manager.getBaseUrl() + '?flat=true&locale=' + this.options.locale,
                         searchInstanceName: name,
                         searchFields: ['title'],
-                        resultKey: name,
+                        resultKey: '{{ entity_pluralize|snake_case() }}',
                         instanceName: name,
                         actionCallback: this.toEdit.bind(this)
                     }

@@ -158,4 +158,15 @@ abstract class AbstractSuluGenerator extends Generator
             'note', 'all', 'disabled', 'public', 'visible', 'number', 'status',
         ];
     }
+
+    /**
+     * @param $input
+     * @param string $glue
+     *
+     * @return string
+     */
+    protected static function snakeCase($input, $glue = '_')
+    {
+        return str_replace('_', $glue, ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $input)), '_'));
+    }
 }

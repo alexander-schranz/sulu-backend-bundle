@@ -29,7 +29,7 @@ class {{ entity_class }}NavigationProvider implements ContentNavigationProviderI
 
         $navigationItems['general'] = new ContentNavigationItem('content-navigation.webspace.general');
         $navigationItems['general']->setAction('general');
-        $navigationItems['general']->setComponent('{{ entity_pluralize|camelize }}/edit/general@{{ js_bundle_name }}');
+        $navigationItems['general']->setComponent('{{ entity_pluralize|snake_case('-') }}/edit/general@{{ js_bundle_name }}');
 
         return $navigationItems;
     }
