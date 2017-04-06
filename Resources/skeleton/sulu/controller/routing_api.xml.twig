@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://friendsofsymfony.github.com/schema/rest https://raw.github.com/FriendsOfSymfony/FOSRestBundle/master/Resources/config/schema/routing/rest_routing-1.0.xsd">
 
-    <import id="{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}"
+    <import id="{{ bundle_prefix|replace({'_': '.'}) }}.{{ entity_pluralize|snake_case }}"
             type="rest"
             resource="{{ namespace }}\Controller{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}Controller"
             name-prefix="{{ bundle_prefix }}." />

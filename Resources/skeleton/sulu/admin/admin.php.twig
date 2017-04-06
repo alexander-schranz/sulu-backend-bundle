@@ -42,7 +42,7 @@ class {{ entity_class }}Admin extends Admin
         $section->addChild($navigationItem);
 
         // add {{ entity }} navigation
-        if ($securityChecker->hasPermission('sulu.{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}', 'view')) {
+        if ($securityChecker->hasPermission('sulu.{{ bundle_prefix|replace({'_': '.'}) }}.{{ entity_pluralize|snake_case }}', 'view')) {
             $childItem = new NavigationItem('{{ bundle_prefix }}.{{ entity_pluralize|snake_case }}');
             $childItem->setAction('{{ bundle_namespace }}/{{ entity_pluralize|snake_case }}');
             $childItem->setPosition(10);
@@ -78,7 +78,7 @@ class {{ entity_class }}Admin extends Admin
         return [
             'Sulu' => [
                 '{{ entity }}' => [
-                    'sulu.{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}',
+                    'sulu.{{ bundle_prefix|replace({'_': '.'}) }}.{{ entity_pluralize|snake_case }}',
                 ],
             ],
         ];
