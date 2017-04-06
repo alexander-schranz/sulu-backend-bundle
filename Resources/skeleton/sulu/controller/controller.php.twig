@@ -49,7 +49,7 @@ class {{ entity_class }}Controller extends AbstractBackendController implements 
      */
     public function getSecurityContext()
     {
-        return 'sulu.{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}';
+        return 'sulu.{{ bundle_prefix|replace({'_': '.'}) }}.{{ entity_pluralize|snake_case }}';
     }
 
 {% endblock %}

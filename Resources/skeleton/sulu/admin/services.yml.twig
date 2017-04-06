@@ -13,12 +13,12 @@ services:
             - 'globe' # icon main navigation
             - '{{ js_bundle_name }}' # jsBundleName
             - {{ entity_pluralize|snake_case }}:
-                permission: {{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }} # permission for this menu point
+                permission: {{ bundle_prefix|replace({'_': '.'}) }}.{{ entity_pluralize|snake_case }} # permission for this menu point
                 title: {{ bundle_prefix }}.{{ entity_pluralize|snake_case }} # menu title
                 action: {{ bundle_namespace }}/{{ entity_pluralize|snake_case }} # menu routing action
             - Sulu: # securityContexts
                 {{ entity }}:
-                    - sulu.{{ bundle_prefix|replace('_', '.') }}.{{ entity_pluralize|snake_case }}
+                    - sulu.{{ bundle_prefix|replace({'_': '.'}) }}.{{ entity_pluralize|snake_case }}
 {% endif %}
         tags:
             - { name: sulu.admin }

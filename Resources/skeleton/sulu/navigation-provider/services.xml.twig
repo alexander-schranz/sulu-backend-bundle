@@ -12,7 +12,7 @@
 {% if not extended %}
             <argument type="collection">
                 <argument key="{{ entity|snake_case }}" type="collection">
-                    <argument key="title">{{ bundle_prefix|replace('_', '.') }}.navigation.details</argument>
+                    <argument key="title">{{ bundle_prefix|replace({'_': '.'}) }}.navigation.details</argument>
                     <argument key="action">general</argument>
                     <argument key="component">{{ entity_pluralize|camelize }}/edit/general@{{ js_bundle_name }}</argument>
                 </argument>

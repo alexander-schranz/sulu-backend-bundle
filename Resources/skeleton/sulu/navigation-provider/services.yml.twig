@@ -8,7 +8,7 @@ services:
 {% if not extended %}
         arguments:
             - {{ entity|snake_case }}:
-                title: {{ bundle_prefix|replace('_', '.') }}.navigation.details # tab title
+                title: {{ bundle_prefix|replace({'_': '.'}) }}.navigation.details # tab title
                 action: general # tab action
                 component: {{ entity_pluralize|camelize }}/edit/general@{{ js_bundle_name }} # tab component
 
