@@ -14,7 +14,11 @@
                               class="form-element hidden husky-validate"
                               data-type="textEditor"
                               data-aura-component="ckeditor@husky"
+                              data-aura-webspace="ckeditor@husky"
+                              data-aura-component="ckeditor@husky"
                               data-type-instance-name="{{ field|snake_case('-') }}"
+                              data-aura-webspace=""
+                              data-aura-locale=""
                               data-form="true"
 {% if not metadata.fieldMappings[field]['nullable']|default(false) %}
                               data-validation-required="true"
